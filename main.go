@@ -2,7 +2,6 @@ package main
 
 import (
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -24,26 +23,9 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func imageHandler(w http.ResponseWriter, r *http.Request) {
-
-	fileBytes, err := ioutil.ReadFile("site/images/signal.jpeg")
-	if err != nil {
-		panic(err.Error())
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "application/octet-stream")
-	if _, err := w.Write(fileBytes); err != nil {
-		panic(err.Error())
-	}
-	return
-}
-
 func main() {
 	r := mux.NewRouter()
-
-	r.Handle("/site/images/", http.StripPrefix("/site/images/", http.FileServer(http.Dir("/site/images"))))
-	r.HandleFunc("/site/images/", imageHandler)
+	r.Handle("/site/images/{image}", http.StripPrefix("/site/images", http.FileServer(http.Dir("./site/images"))))
 	r.HandleFunc("/", indexHandler)
 
 	log.Println("Starting server...")
