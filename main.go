@@ -14,7 +14,9 @@ var addr = ":3000"
 var tpl *template.Template
 
 func init() {
-	tpl = template.Must(template.ParseGlob("site/templates/*"))
+	tpl = template.Must(template.ParseGlob("site/templates/util/*"))
+	tpl = template.Must(tpl.ParseGlob("site/templates/pages/*"))
+	tpl = template.Must(tpl.ParseGlob("site/templates/error-pages/*"))
 }
 
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
