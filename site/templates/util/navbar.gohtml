@@ -1,5 +1,31 @@
-{{define "navbar"}}
-<nav class="top-0 w-screen h-16 bg-gray-700 shadow-md">
-
+{{ define "navbar" }}
+<nav class="top-0 w-screen h-16 bg-gray-900 shadow-md">
+    <div class="container flex justify-between items-center mx-auto">
+        <a class="flex items-center" href="/">
+            <img class="block ml-10 w-16 h-16" src="/site/images/nd-logo-alpha.png" alt="ND" />
+        </a>
+        <div class="flex items-center mr-4 space-x-4 w-auto">
+            {{ if eq "/" .Page }}
+            <a href="/" class="inline-block text-xl text-center text-red">Home</a>
+            {{ else }}
+            <a href="/" class="inline-block text-xl text-center text-gray-100 hover:text-red">Home</a>
+            {{ end }}
+            {{ if eq "/about" .Page }}
+            <a href="/about" class="inline-block text-xl text-center text-yellow">About</a>
+            {{ else }}
+            <a href="/about" class="inline-block text-xl text-center text-gray-100 hover:text-yellow">About</a>
+            {{ end }}
+            {{ if eq "/projects" .Page }}
+            <a href="/projects" class="inline-block text-xl text-center text-green">Projects</a>
+            {{ else }}
+            <a href="/projects" class="inline-block text-xl text-center text-gray-100 hover:text-green">Projects</a>
+            {{ end }}
+            {{ if eq "/blog" .Page }}
+            <a href="/blog" class="inline-block text-xl text-center text-blue">Blog</a>
+            {{ else }}
+            <a href="/blog" class="inline-block text-xl text-center text-gray-100 hover:text-blue">Blog</a>
+            {{ end }}
+        </div>
+    </div>
 </nav>
-{{end}}
+{{ end }}

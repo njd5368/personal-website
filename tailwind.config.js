@@ -3,6 +3,9 @@ module.exports = {
       './site/templates/**/*.gohtml'
   ],
   theme: {
+    fontFamily: {
+      'sans': ['Montserrat']
+    },
     colors: {
       transparent: 'transparent',
       current: 'currentColor',

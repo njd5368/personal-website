@@ -28,7 +28,10 @@ func main() {
 	r.HandleFunc("/favicon.ico", faviconHandler)
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		handlers.IndexHandler(w, r, tpl)
+		handlers.HomeHandler(w, r, tpl)
+	})
+	r.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
+		handlers.AboutHandler(w, r, tpl)
 	})
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
