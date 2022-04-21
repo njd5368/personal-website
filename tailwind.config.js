@@ -34,7 +34,11 @@ module.exports = {
       'blue':     '#96CDFB',
       'sky':      '#89DCEB',
     },
-    extend: {},
+    extend: {
+      spacing: {
+        '26': '6.5rem',
+      },
+    },
   },
   plugins: [],
 }
