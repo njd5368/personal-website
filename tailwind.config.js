@@ -38,6 +38,10 @@ module.exports = {
       spacing: {
         '26': '6.5rem',
       },
+      aspectRatio: {
+        'golden-y': '1 / 1.618',
+        'golden-x': '1.618 / 1',
+      },
     },
   },
   plugins: [],
