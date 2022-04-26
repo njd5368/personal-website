@@ -33,6 +33,12 @@ func main() {
 	r.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
 		handlers.AboutHandler(w, r, tpl)
 	})
+	r.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
+		handlers.ProjectsHandler(w, r, tpl)
+	})
+	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
+		handlers.BlogHandler(w, r, tpl)
+	})
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		handlers.NotFoundHandler(w, r, tpl)

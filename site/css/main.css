@@ -502,36 +502,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   }
 }
 
-.absolute {
-  position: absolute;
-}
-
-.relative {
-  position: relative;
-}
-
 .top-0 {
   top: 0px;
-}
-
-.left-0 {
-  left: 0px;
-}
-
-.top-96 {
-  top: 24rem;
-}
-
-.left-26 {
-  left: 6.5rem;
-}
-
-.left-\[294px\] {
-  left: 294px;
-}
-
-.left-\[568px\] {
-  left: 568px;
 }
 
 .col-span-2 {
@@ -636,32 +608,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: grid;
 }
 
-.aspect-square {
-  aspect-ratio: 1 / 1;
-}
-
-.aspect-golden-x {
-  aspect-ratio: 1.618 / 1;
-}
-
-.aspect-golden-y {
-  aspect-ratio: 1 / 1.618;
-}
-
 .h-auto {
   height: auto;
-}
-
-.h-52 {
-  height: 13rem;
-}
-
-.h-60 {
-  height: 15rem;
-}
-
-.h-80 {
-  height: 20rem;
 }
 
 .h-full {
