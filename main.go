@@ -16,9 +16,13 @@ import (
 
 type Config struct {
 	Scheme string `json:"scheme"`
-	Host string `json:"host"`
-	Port int `json:"port"`
+	Host   string `json:"host"`
+	Port   int    `json:"port"`
+
+	CertFile string `json:"certFile"`
+	KeyFile  string `json:"keyFile"`
 }
+
 var tpl *template.Template
 
 func init() {
@@ -86,6 +90,11 @@ func main() {
 
 	c := readConfigFile()
 
-	log.Println("Starting server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
-	log.Fatal(http.ListenAndServe(c.Host + ":" + strconv.Itoa(c.Port), r))
+	if len(c.CertFile) == 0 || len(c.KeyFile) == 0 {
+		log.Println("Starting insecure server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
+		log.Fatal(http.ListenAndServe(c.Host+":"+strconv.Itoa(c.Port), r))
+	} else {
+		log.Println("Starting secure server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
+		log.Fatal(http.ListenAndServeTLS(c.Host+":"+strconv.Itoa(c.Port), c.CertFile, c.KeyFile, r))	
+	}
 }
