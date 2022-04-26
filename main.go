@@ -86,6 +86,6 @@ func main() {
 
 	c := readConfigFile()
 
-	log.Println("Starting server....")
+	log.Println("Starting server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
 	log.Fatal(http.ListenAndServe(c.Host + ":" + strconv.Itoa(c.Port), r))
 }
