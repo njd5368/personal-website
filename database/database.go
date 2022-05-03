@@ -2,6 +2,7 @@ package database
 
 import (
 	"database/sql"
+	"errors"
 	"strconv"
 )
 
@@ -23,14 +24,21 @@ func NewSQLiteDatabase(db *sql.DB) *SQLiteDatabase {
 func (d *SQLiteDatabase) StartDatabase() error {
 	queries := []string{
 		`
+		CREATE TABLE IF NOT EXISTS Image(
+			ID INTEGER PRIMARY KEY AUTOINCREMENT,
+			Image BLOB
+		);
+		`,
+		`
 		CREATE TABLE IF NOT EXISTS Project(
 			ID INTEGER PRIMARY KEY AUTOINTCREMENT,
-			Name TEXT NOT NULL,
+			Name TEXT NOT NULL UNIQUE,
 			Description TEXT NOT NULL,
 			Date TEXT NOT NULL,
 			Type TEXT NOT NULL,
-			Image BLOB,
+			Image INTEGER,
 			File BLOB NOT NULL
+			FOREIGN KEY(Image) REFERENCES Image(ID)
 		);
 		`,
 		`
@@ -63,12 +71,6 @@ func (d *SQLiteDatabase) StartDatabase() error {
 			FOREIGN KEY(Technology) REFERENCES Technology(ID)
 		);
 		`,
-		`
-		CREATE TABLE IF NOT EXISTS Image(
-			ID INTEGER PRIMARY KEY AUTOINCREMENT,
-			Image BLOB
-		);
-		`,
 	}
 
 	for _, query := range queries {
@@ -81,14 +83,26 @@ func (d *SQLiteDatabase) StartDatabase() error {
 	return nil
 }
 
-func (d *SQLiteDatabase) CreateProject(p Project) (*Project, error) {
-	r, err := d.db.Exec("INSERT INTO Project(Name, Description, Date, Type, Image, File) VALUES(?,?,?,?,?,?)",
-		p.Name, p.Description, p.Date, p.Type, p.Image, p.File)
+func (d *SQLiteDatabase) CreateProject(p Project, i []byte) (*Project, error) {
+	r, err := d.db.Exec("INSERT INTO Image(Image) VALUES(?)", i)
 	if err != nil {
 		return nil, err
 	}
 
 	id, err := r.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+
+	p.Image = id
+
+	r, err = d.db.Exec("INSERT INTO Project(Name, Description, Date, Type, Image, File) VALUES(?,?,?,?,?,?)",
+		p.Name, p.Description, p.Date, p.Type, p.Image, p.File)
+	if err != nil {
+		return nil, err
+	}
+
+	id, err = r.LastInsertId()
 	if err != nil {
 		return nil, err
 	}
@@ -167,19 +181,71 @@ func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
 	)
 	ON Project.ID=ProjectTechnology.Project
 	`
-	rows, err := d.db.Query(query)
+	r, err := d.db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer r.Close()
 
 	var projects []Project
-	for rows.Next() {
+	for r.Next() {
 		var p Project
-		if err := rows.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &p.Languages, &p.Technologies); err != nil {
+		if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &p.Languages, &p.Technologies); err != nil {
 			return nil, err
 		}
 		projects = append(projects, p)
 	}
 	return projects, nil
+}
+
+func (d *SQLiteDatabase) GetProjectByName(n string) (*Project, error) {
+	query := `
+	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Project.File, Language.Name, Technology.Name
+	FROM Project 
+	LEFT JOIN (
+		ProjectLanguage 
+		INNER JOIN Language 
+		ON ProjectLanguage.Language=Language.ID
+	)
+	ON Project.ID=ProjectLanguage.Project
+	LEFT JOIN (
+		ProjectTechnology
+		INNER JOIN Technology
+		ON ProjectTechnology.Technology=Technology.ID
+	)
+	ON Project.ID=ProjectTechnology.Project
+	WHERE Project.Name='` + n + `'
+	`
+
+	r := d.db.QueryRow(query)
+	if r.Err() == sql.ErrNoRows {
+		return nil, errors.New("No project with name '" + n + "'")
+	}
+
+	var p Project
+	if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &p.File, &p.Languages, &p.Technologies); err != nil {
+		return nil, err
+	}
+
+	return &p, nil
+}
+
+func (d *SQLiteDatabase) GetImageByID(id int) ([]byte, error) {
+	query := `
+	SELECT Image
+	FROM Image
+	WHERE ID=` + strconv.Itoa(id) + `
+	`
+
+	r := d.db.QueryRow(query)
+	if r.Err() == sql.ErrNoRows {
+		return nil, errors.New("No image with id " + strconv.Itoa(id))
+	}
+
+	var i []byte
+	if err := r.Scan(&i); err != nil {
+		return nil, err
+	}
+
+	return i, nil
 }

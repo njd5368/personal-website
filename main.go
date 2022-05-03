@@ -1,14 +1,13 @@
 package main
 
 import (
-	"encoding/json"
-	"errors"
+	"database/sql"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"net/http"
+	"nicholas-deary/config"
+	"nicholas-deary/database"
 	"nicholas-deary/handlers"
-	"os"
 	"strconv"
 
 	"github.com/gorilla/mux"
@@ -21,44 +20,19 @@ type Config struct {
 
 	CertFile string `json:"certFile"`
 	KeyFile  string `json:"keyFile"`
+
+	Users []struct{
+		Username string `json:"username"`
+		Password string `json:"password"`
+	} `json:"users"`
 }
 
-var tpl *template.Template
+var t *template.Template
 
 func init() {
-	tpl = template.Must(template.ParseGlob("site/templates/util/*"))
-	tpl = template.Must(tpl.ParseGlob("site/templates/pages/*"))
-	tpl = template.Must(tpl.ParseGlob("site/templates/error-pages/*"))
-}
-
-func readConfigFile() Config {
-	h, err := os.UserHomeDir()
-
-	if err != nil {
-		log.Panic("Problem getting home directory: " + err.Error())
-	}
-
-	b, err := ioutil.ReadFile(h + "/.config/personal-website/config.json")
-
-	if errors.Is(err, os.ErrNotExist) {
-		log.Panic("Config file does not exist at ~/.config/personal-website/config.json\n" + err.Error())
-	}
-	if err != nil {
-		log.Panic("Problem opening ~/.config/personal-website/config.json\n" + err.Error())
-	}
-
-	if err != nil {
-		log.Panic("Problem reading config file\n" + err.Error())
-	}
-
-	var c Config
-	err = json.Unmarshal(b, &c)
-
-	if err != nil {
-		log.Panic("Problem unmarshaling data from config\n" + err.Error())
-	}
-
-	return c
+	t = template.Must(template.ParseGlob("site/templates/util/*"))
+	t = template.Must(t.ParseGlob("site/templates/pages/*"))
+	t = template.Must(t.ParseGlob("site/templates/error-pages/*"))
 }
 
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
@@ -66,29 +40,52 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	c, err := config.ReadConfigFile()
+	if err != nil {
+		log.Panic(err)
+	}
+
+	d := database.NewSQLiteDatabase(&sql.DB{}) //TODO: add db
+
 	r := mux.NewRouter()
+	a := r.NewRoute().Subrouter()
+
 	r.Handle("/site/css/{css-file}", http.StripPrefix("/site/css", http.FileServer(http.Dir("./site/css"))))
 	r.Handle("/site/images/{image}", http.StripPrefix("/site/images", http.FileServer(http.Dir("./site/images"))))
 	r.HandleFunc("/favicon.ico", faviconHandler)
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		handlers.HomeHandler(w, r, tpl)
+		handlers.HomeHandler(w, r, t)
 	})
 	r.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
-		handlers.AboutHandler(w, r, tpl)
+		handlers.AboutHandler(w, r, t)
 	})
 	r.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
-		handlers.ProjectsHandler(w, r, tpl)
+		handlers.ProjectsHandler(w, r, t, d)
+	}).Methods("GET")
+	r.HandleFunc("projects/{name}", func(w http.ResponseWriter, r *http.Request) {
+
 	})
 	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
-		handlers.BlogHandler(w, r, tpl)
+		handlers.BlogHandler(w, r, t)
+	})
+	r.HandleFunc("blog/{name}", func(w http.ResponseWriter, r *http.Request) {
+
+	})
+
+	r.HandleFunc("/image/{id}", func(w http.ResponseWriter, r *http.Request) {
+
 	})
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		handlers.NotFoundHandler(w, r, tpl)
+		handlers.NotFoundHandler(w, r, t)
 	})
 
-	c := readConfigFile()
+	a.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostProjectHandler(w, r, d)
+	}).Methods("POST")
+
+	a.Use()
 
 	if len(c.CertFile) == 0 || len(c.KeyFile) == 0 {
 		log.Println("Starting insecure server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
