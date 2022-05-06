@@ -8,25 +8,14 @@ import (
 	"nicholas-deary/config"
 	"nicholas-deary/database"
 	"nicholas-deary/handlers"
+	"nicholas-deary/middleware"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 )
 
-type Config struct {
-	Scheme string `json:"scheme"`
-	Host   string `json:"host"`
-	Port   int    `json:"port"`
-
-	CertFile string `json:"certFile"`
-	KeyFile  string `json:"keyFile"`
-
-	Users []struct{
-		Username string `json:"username"`
-		Password string `json:"password"`
-	} `json:"users"`
-}
-
+const databaseFile = "blog.db"
 var t *template.Template
 
 func init() {
@@ -45,7 +34,16 @@ func main() {
 		log.Panic(err)
 	}
 
-	d := database.NewSQLiteDatabase(&sql.DB{}) //TODO: add db
+	db, err := sql.Open("sqlite3", databaseFile)
+	if err != nil {
+		log.Panic(err)
+	}
+
+	d := database.NewSQLiteDatabase(db)
+	err = d.StartDatabase()
+	if err != nil {
+		log.Panic(err)
+	}
 
 	r := mux.NewRouter()
 	a := r.NewRoute().Subrouter()
@@ -85,7 +83,7 @@ func main() {
 		handlers.PostProjectHandler(w, r, d)
 	}).Methods("POST")
 
-	a.Use()
+	a.Use(middleware.APIAuthorization{Config: c}.CheckUserAuthorziation)
 
 	if len(c.CertFile) == 0 || len(c.KeyFile) == 0 {
 		log.Println("Starting insecure server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")

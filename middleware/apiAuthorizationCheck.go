@@ -14,7 +14,7 @@ import (
 )
 
 type APIAuthorization struct {
-	Config config.Config
+	Config *config.Config
 }
 
 func (a APIAuthorization) CheckUserAuthorziation(next http.Handler) http.Handler {

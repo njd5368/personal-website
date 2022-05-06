@@ -24,6 +24,9 @@ func NewSQLiteDatabase(db *sql.DB) *SQLiteDatabase {
 func (d *SQLiteDatabase) StartDatabase() error {
 	queries := []string{
 		`
+		PRAGMA foreign_keys = ON;
+		`,
+		`
 		CREATE TABLE IF NOT EXISTS Image(
 			ID INTEGER PRIMARY KEY AUTOINCREMENT,
 			Image BLOB
@@ -31,13 +34,13 @@ func (d *SQLiteDatabase) StartDatabase() error {
 		`,
 		`
 		CREATE TABLE IF NOT EXISTS Project(
-			ID INTEGER PRIMARY KEY AUTOINTCREMENT,
+			ID INTEGER PRIMARY KEY AUTOINCREMENT,
 			Name TEXT NOT NULL UNIQUE,
 			Description TEXT NOT NULL,
 			Date TEXT NOT NULL,
 			Type TEXT NOT NULL,
-			Image INTEGER,
-			File BLOB NOT NULL
+			Image INTEGER NOT NULL,
+			File BLOB NOT NULL,
 			FOREIGN KEY(Image) REFERENCES Image(ID)
 		);
 		`,

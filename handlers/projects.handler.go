@@ -75,4 +75,6 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 		log.Print(err)
 		w.WriteHeader(500)
 	}
+
+	w.WriteHeader(200)
 }
