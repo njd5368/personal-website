@@ -55,6 +55,7 @@ func (a APIAuthorization) CheckUserAuthorziation(next http.Handler) http.Handler
             w.Write([]byte("Unauthorized."))
             return
         }
+        log.Printf("%s is making an API call.", username)
 
         next.ServeHTTP(w, r)
     })

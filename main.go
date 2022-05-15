@@ -67,7 +67,7 @@ func main() {
 	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
 		handlers.BlogHandler(w, r, t)
 	})
-	r.HandleFunc("blog/{name}", func(w http.ResponseWriter, r *http.Request) {
+	r.HandleFunc("/blog/{name}", func(w http.ResponseWriter, r *http.Request) {
 
 	})
 
@@ -79,7 +79,7 @@ func main() {
 		handlers.NotFoundHandler(w, r, t)
 	})
 
-	a.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
+	a.HandleFunc("/api/projects", func(w http.ResponseWriter, r *http.Request) {
 		handlers.PostProjectHandler(w, r, d)
 	}).Methods("POST")
 
