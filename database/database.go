@@ -86,6 +86,20 @@ func (d *SQLiteDatabase) StartDatabase() error {
 	return nil
 }
 
+func (d *SQLiteDatabase) CreateImage(i []byte) (int64, error) {
+	r, err := d.db.Exec("INSERT INTO Image(Image) VALUES(?)", i)
+	if err != nil {
+		return -1, err
+	}
+
+	id, err := r.LastInsertId()
+	if err != nil {
+		return -1, err
+	}
+
+	return id, nil
+}
+
 func (d *SQLiteDatabase) CreateProject(p Project, i []byte) (*Project, error) {
 	r, err := d.db.Exec("INSERT INTO Image(Image) VALUES(?)", i)
 	if err != nil {

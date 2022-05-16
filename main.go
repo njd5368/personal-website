@@ -29,11 +29,13 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	log.Print("Reading config file...")
 	c, err := config.ReadConfigFile()
 	if err != nil {
 		log.Panic(err)
 	}
 
+	log.Print("Configuring relational database...")
 	db, err := sql.Open("sqlite3", databaseFile)
 	if err != nil {
 		log.Panic(err)
@@ -45,6 +47,7 @@ func main() {
 		log.Panic(err)
 	}
 
+	log.Print("Setting up routes...")
 	r := mux.NewRouter()
 	a := r.NewRoute().Subrouter()
 
@@ -54,26 +57,26 @@ func main() {
 
 	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		handlers.HomeHandler(w, r, t)
-	})
+	}).Methods("GET")
 	r.HandleFunc("/about", func(w http.ResponseWriter, r *http.Request) {
 		handlers.AboutHandler(w, r, t)
-	})
+	}).Methods("GET")
 	r.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
 		handlers.ProjectsHandler(w, r, t, d)
 	}).Methods("GET")
 	r.HandleFunc("projects/{name}", func(w http.ResponseWriter, r *http.Request) {
 
-	})
+	}).Methods("GET")
 	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
 		handlers.BlogHandler(w, r, t)
-	})
+	}).Methods("GET")
 	r.HandleFunc("/blog/{name}", func(w http.ResponseWriter, r *http.Request) {
 
-	})
+	}).Methods("GET")
 
 	r.HandleFunc("/image/{id}", func(w http.ResponseWriter, r *http.Request) {
-
-	})
+		handlers.GetImageHandler(w, r, d)
+	}).Methods("GET")
 
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		handlers.NotFoundHandler(w, r, t)
@@ -81,6 +84,9 @@ func main() {
 
 	a.HandleFunc("/api/projects", func(w http.ResponseWriter, r *http.Request) {
 		handlers.PostProjectHandler(w, r, d)
+	}).Methods("POST")
+	a.HandleFunc("/api/image", func (w http.ResponseWriter, r *http.Request)  {
+		handlers.PostImageHandler(w, r, d, c)
 	}).Methods("POST")
 
 	a.Use(middleware.APIAuthorization{Config: c}.CheckUserAuthorziation)
