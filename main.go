@@ -64,8 +64,8 @@ func main() {
 	r.HandleFunc("/projects", func(w http.ResponseWriter, r *http.Request) {
 		handlers.ProjectsHandler(w, r, t, d)
 	}).Methods("GET")
-	r.HandleFunc("projects/{name}", func(w http.ResponseWriter, r *http.Request) {
-
+	r.HandleFunc("/projects/{name}", func(w http.ResponseWriter, r *http.Request) {
+		handlers.ProjectHandler(w, r, t, d)
 	}).Methods("GET")
 	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
 		handlers.BlogHandler(w, r, t)

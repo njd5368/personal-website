@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"strconv"
+	"strings"
 )
 
 type Database interface {
@@ -127,52 +128,40 @@ func (d *SQLiteDatabase) CreateProject(p Project, i []byte) (*Project, error) {
 	p.ID = id
 
 	if len(p.Languages) != 0 {
+		existanceChecks := `INSERT OR IGNORE INTO Language(Name) VALUES`
 		statement := `INSERT INTO ProjectLanguage(Project, Language) VALUES`
 		for i, l := range(p.Languages) {
 			if i != 0 {
+				existanceChecks += `, `
 				statement += `, `
 			}
-			statement +=
-			`
-			(` + strconv.FormatInt(p.ID, 10) + `, (IF EXISTS ( SELECT 1 FROM Language WHERE Name = '` + l + `')
-			BEGIN
-				SELECT ID FROM Language WHERE Name = '` + l + `'
-			END
-			ELSE
-			BEGIN
-				INSERT INTO Language(Name) VALUES('` + l + `') AND SELECT ID FROM Language WHERE Name = '` + l + `'
-			END
-			END IF))`
+			existanceChecks += `('` + l + `')`
+			statement += `(` + strconv.FormatInt(p.ID, 10) + `, (SELECT ID FROM Language WHERE Name = '` + l + `'))`
 		}
-		statement += ";"
+		existanceChecks += `;`
+		statement += `;`
 
-		_, err := d.db.Exec(statement)
+		_, err := d.db.Exec(existanceChecks + statement)
 		if err != nil {
 			return nil, err
 		}
 	}
 
 	if len(p.Technologies) != 0 {
+		existanceChecks := `INSERT OR IGNORE INTO Technology(Name) VALUES`
 		statement := `INSERT INTO ProjectTechnology(Project, Technology) VALUES`
 		for i, t := range(p.Technologies) {
 			if i != 0 {
+				existanceChecks += `, `
 				statement += `, `
 			}
-			statement +=
-			`
-			(` + strconv.FormatInt(p.ID, 10) + `, (IF EXISTS ( SELECT 1 FROM Technology WHERE Name = '` + t + `')
-			BEGIN
-				SELECT ID FROM Technology WHERE Name = '` + t + `'
-			END
-			ELSE
-			BEGIN
-				INSERT INTO Technology(Name) VALUES('` + t + `') AND SELECT ID FROM Technology WHERE Name = '` + t + `'
-			END
-			END IF))`
+			existanceChecks += `('` + t + `')`
+			statement += `(` + strconv.FormatInt(p.ID, 10) + `, (SELECT ID FROM Technology WHERE Name = '` + t + `'))`
 		}
+		existanceChecks += `;`
 		statement += `;`
 
-		_, err := d.db.Exec(statement)
+		_, err := d.db.Exec(existanceChecks + statement)
 		if err != nil {
 			return nil, err
 		}
@@ -183,20 +172,24 @@ func (d *SQLiteDatabase) CreateProject(p Project, i []byte) (*Project, error) {
 
 func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
 	query := `
-	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Language.Name, Technology.Name
-	FROM Project 
+	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Languages, Technologies
+	FROM Project
 	LEFT JOIN (
-		ProjectLanguage 
-		INNER JOIN Language 
+		SELECT ProjectLanguage.Project AS ProjectLanguageID, GROUP_CONCAT(Language.Name) AS Languages
+		FROM ProjectLanguage
+		LEFT JOIN Language
 		ON ProjectLanguage.Language=Language.ID
+		GROUP BY ProjectLanguageID
 	)
-	ON Project.ID=ProjectLanguage.Project
+	ON Project.ID=ProjectLanguageID
 	LEFT JOIN (
-		ProjectTechnology
-		INNER JOIN Technology
+		SELECT ProjectTechnology.Project AS ProjectTechnologyID, GROUP_CONCAT(Technology.Name) AS Technologies
+		FROM ProjectTechnology
+		LEFT JOIN Technology
 		ON ProjectTechnology.Technology=Technology.ID
+		GROUP BY ProjectTechnologyID
 	)
-	ON Project.ID=ProjectTechnology.Project
+	ON Project.ID=ProjectTechnologyID
 	`
 	r, err := d.db.Query(query)
 	if err != nil {
@@ -207,9 +200,13 @@ func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
 	var projects []Project
 	for r.Next() {
 		var p Project
-		if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &p.Languages, &p.Technologies); err != nil {
+		var languages string
+		var techs string
+		if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &languages, &techs); err != nil {
 			return nil, err
 		}
+		p.Languages = strings.Split(languages, ",")
+		p.Technologies = strings.Split(techs, ",")
 		projects = append(projects, p)
 	}
 	return projects, nil
@@ -217,20 +214,24 @@ func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
 
 func (d *SQLiteDatabase) GetProjectByName(n string) (*Project, error) {
 	query := `
-	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Project.File, Language.Name, Technology.Name
-	FROM Project 
+	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Project.File, Languages, Technologies
+	FROM Project
 	LEFT JOIN (
-		ProjectLanguage 
-		INNER JOIN Language 
+		SELECT ProjectLanguage.Project AS ProjectLanguageID, GROUP_CONCAT(Language.Name) AS Languages
+		FROM ProjectLanguage
+		LEFT JOIN Language
 		ON ProjectLanguage.Language=Language.ID
+		GROUP BY ProjectLanguageID
 	)
-	ON Project.ID=ProjectLanguage.Project
+	ON Project.ID=ProjectLanguageID
 	LEFT JOIN (
-		ProjectTechnology
-		INNER JOIN Technology
+		SELECT ProjectTechnology.Project AS ProjectTechnologyID, GROUP_CONCAT(Technology.Name) AS Technologies
+		FROM ProjectTechnology
+		LEFT JOIN Technology
 		ON ProjectTechnology.Technology=Technology.ID
+		GROUP BY ProjectTechnologyID
 	)
-	ON Project.ID=ProjectTechnology.Project
+	ON Project.ID=ProjectTechnologyID
 	WHERE Project.Name='` + n + `'
 	`
 
@@ -238,12 +239,15 @@ func (d *SQLiteDatabase) GetProjectByName(n string) (*Project, error) {
 	if r.Err() == sql.ErrNoRows {
 		return nil, errors.New("No project with name '" + n + "'")
 	}
-
+	
 	var p Project
-	if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &p.File, &p.Languages, &p.Technologies); err != nil {
+	var languages string
+	var techs string
+	if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Type, &p.Image, &p.File, &languages, &techs); err != nil {
 		return nil, err
 	}
-
+	p.Languages = strings.Split(languages, ",")
+	p.Technologies = strings.Split(techs, ",")
 	return &p, nil
 }
 

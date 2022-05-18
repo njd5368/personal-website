@@ -1,6 +1,4 @@
 {{ template "header" }}
     {{ template "navbar" . }}
-    {{ range .Projects}}
-        <h3>{{.Name}}</h3>
-    {{ end }}
+	{{.ArticleHTML}}
 {{ template "footer" }}

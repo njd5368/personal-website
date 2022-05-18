@@ -6,13 +6,23 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 
 	"nicholas-deary/database"
+
+	"github.com/gorilla/mux"
+	"github.com/russross/blackfriday/v2"
 )
 
 type ProjectsData struct {
 	Page string
 	Projects []database.Project
+}
+
+type ProjectData struct {
+	Page string
+	Project *database.Project
+	ArticleHTML string
 }
 
 func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
@@ -21,8 +31,37 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 		log.Print(err)
 		return
 	}
+	log.Print(p)
 
 	err = t.ExecuteTemplate(w, "projects.gohtml", ProjectsData{Page: "/projects", Projects: p})
+
+	if err != nil {
+		log.Print(err)
+		return
+	}
+}
+
+func ProjectHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
+	v := mux.Vars(r)
+	name, err := url.QueryUnescape(v["name"])
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+	if len(name) == 0 {
+		log.Print("Empty name. Handlers set wrong.")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	
+	p, err := d.GetProjectByName(name)
+	if err != nil {
+		log.Print(err)
+		return
+	}
+
+	err = t.ExecuteTemplate(w, "project.gohtml", ProjectData{Page: "/projects", Project: p, ArticleHTML: string(blackfriday.Run(p.File))})
 
 	if err != nil {
 		log.Print(err)
@@ -48,13 +87,15 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Print(err)
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	err = json.Unmarshal(b, &body)
 	if err != nil {
 		log.Print(err)
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	p := database.Project{
@@ -70,11 +111,14 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 		File: body.File,
 	}
 
-	_, err = d.CreateProject(p, body.Image)
+	project, err := d.CreateProject(p, body.Image)
 	if err != nil {
 		log.Print(err)
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	w.WriteHeader(200)
+	w.WriteHeader(http.StatusAccepted)
+	log.Print("New post submitted: " + project.Name)
+	return
 }

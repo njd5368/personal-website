@@ -19,6 +19,8 @@ type APIAuthorization struct {
 
 func (a APIAuthorization) CheckUserAuthorziation(next http.Handler) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        log.Print("API call made from " + r.RemoteAddr)
+
         authorization := r.Header.Get("Authorization")
 
         authorizationList := strings.Split(authorization, " ")
