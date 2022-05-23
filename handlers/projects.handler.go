@@ -7,10 +7,12 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"regexp"
 
 	"nicholas-deary/database"
 
 	"github.com/gorilla/mux"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
 )
 
@@ -22,7 +24,7 @@ type ProjectsData struct {
 type ProjectData struct {
 	Page string
 	Project *database.Project
-	ArticleHTML string
+	ArticleHTML template.HTML
 }
 
 func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
@@ -60,8 +62,15 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, t *template.Template
 		log.Print(err)
 		return
 	}
+	
+	
 
-	err = t.ExecuteTemplate(w, "project.gohtml", ProjectData{Page: "/projects", Project: p, ArticleHTML: string(blackfriday.Run(p.File))})
+	unsafe := blackfriday.Run(p.File)
+	policy := bluemonday.UGCPolicy()
+	policy.AllowAttrs("class").Matching(regexp.MustCompile("^language-[a-zA-Z0-9]+$")).OnElements("code")
+	html := policy.SanitizeBytes(unsafe)
+
+	err = t.ExecuteTemplate(w, "project.gohtml", ProjectData{Page: "/projects", Project: p, ArticleHTML: template.HTML(html)})
 
 	if err != nil {
 		log.Print(err)
@@ -121,4 +130,8 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 	w.WriteHeader(http.StatusAccepted)
 	log.Print("New post submitted: " + project.Name)
 	return
+}
+
+func getHTMLRenderer() {
+	
 }

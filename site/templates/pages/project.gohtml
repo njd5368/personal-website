@@ -1,4 +1,7 @@
 {{ template "header" }}
     {{ template "navbar" . }}
-	{{.ArticleHTML}}
+    <div class="mx-auto prose prose-catppuccin">
+        
+        {{.ArticleHTML}}
+    </div>
 {{ template "footer" }}
