@@ -1,3 +1,5 @@
 .idea/
 main
 *.db
+node_modules/
+
