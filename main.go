@@ -52,6 +52,7 @@ func main() {
 	a := r.NewRoute().Subrouter()
 
 	r.Handle("/site/css/{css-file}", http.StripPrefix("/site/css", http.FileServer(http.Dir("./site/css"))))
+	r.Handle("/site/js/{js-file}", http.StripPrefix("/site/js", http.FileServer(http.Dir("./site/js"))))
 	r.Handle("/site/images/{image}", http.StripPrefix("/site/images", http.FileServer(http.Dir("./site/images"))))
 	r.HandleFunc("/favicon.ico", faviconHandler)
 

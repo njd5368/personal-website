@@ -63,7 +63,6 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, t *template.Template
 		return
 	}
 	
-	
 
 	unsafe := blackfriday.Run(p.File)
 	policy := bluemonday.UGCPolicy()
