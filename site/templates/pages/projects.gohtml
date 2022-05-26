@@ -1,6 +1,10 @@
 {{ template "header" }}
     {{ template "navbar" . }}
+    <div class="mx-auto my-4 space-y-4">
     {{ range .Projects}}
-        <h3>{{.Name}}</h3>
-    {{ end }}
+        <div class="h-[250px] w-[650px] bg-gray-800 outline outline-2 outline-blue rounded-2xl">
+            <img src={{.HeroImage}} alt="Hero Image" class="h-[125px] w-[650px]"/>
+        </div>
+    {{ end }}  
+    </div>
 {{ template "footer" }}

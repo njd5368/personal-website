@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"regexp"
 
+	"nicholas-deary/config"
 	"nicholas-deary/database"
 
 	"github.com/gorilla/mux"
@@ -43,7 +44,7 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	}
 }
 
-func ProjectHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
+func ProjectHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t *template.Template, d *database.SQLiteDatabase) {
 	v := mux.Vars(r)
 	name, err := url.QueryUnescape(v["name"])
 	if err != nil {
@@ -62,7 +63,6 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, t *template.Template
 		log.Print(err)
 		return
 	}
-	
 
 	unsafe := blackfriday.Run(p.File)
 	policy := bluemonday.UGCPolicy()

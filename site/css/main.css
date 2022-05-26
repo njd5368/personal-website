@@ -1068,6 +1068,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 24rem;
 }
 
+.h-\[250px\] {
+  height: 250px;
+}
+
+.h-\[125px\] {
+  height: 125px;
+}
+
 .h-16 {
   height: 4rem;
 }
@@ -1094,6 +1102,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-screen {
   width: 100vw;
+}
+
+.w-\[650px\] {
+  width: 650px;
 }
 
 .w-3 {
@@ -1190,6 +1202,15 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .rounded-xl {
   border-radius: 0.75rem;
+}
+
+.rounded-2xl {
+  border-radius: 1rem;
+}
+
+.bg-gray-800 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(26 24 38 / var(--tw-bg-opacity));
 }
 
 .bg-gray-900 {
@@ -1306,6 +1327,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.outline {
+  outline-style: solid;
+}
+
+.outline-2 {
+  outline-width: 2px;
+}
+
+.outline-blue {
+  outline-color: #96CDFB;
 }
 
 pre code.hljs {

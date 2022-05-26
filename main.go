@@ -17,9 +17,18 @@ import (
 
 const databaseFile = "blog.db"
 var t *template.Template
+var c *config.Config
 
 func init() {
-	t = template.Must(template.ParseGlob("site/templates/util/*"))
+	var err error
+	c, err = config.ReadConfigFile()
+	if err != nil {
+		log.Panic(err)
+	}
+	t := template.New("").Funcs(template.FuncMap{
+        "image": func(i int64) string { return  c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/image/" + strconv.FormatInt(i, 10)},
+    })
+	t = template.Must(t.ParseGlob("site/templates/util/*"))
 	t = template.Must(t.ParseGlob("site/templates/pages/*"))
 	t = template.Must(t.ParseGlob("site/templates/error-pages/*"))
 }
@@ -29,12 +38,6 @@ func faviconHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	log.Print("Reading config file...")
-	c, err := config.ReadConfigFile()
-	if err != nil {
-		log.Panic(err)
-	}
-
 	log.Print("Configuring relational database...")
 	db, err := sql.Open("sqlite3", databaseFile)
 	if err != nil {
@@ -66,7 +69,7 @@ func main() {
 		handlers.ProjectsHandler(w, r, t, d)
 	}).Methods("GET")
 	r.HandleFunc("/projects/{name}", func(w http.ResponseWriter, r *http.Request) {
-		handlers.ProjectHandler(w, r, t, d)
+		handlers.ProjectHandler(w, r, c, t, d)
 	}).Methods("GET")
 	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
 		handlers.BlogHandler(w, r, t)
