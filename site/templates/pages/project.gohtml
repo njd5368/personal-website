@@ -1,7 +1,7 @@
 {{ template "header" }}
     {{ template "navbar" . }}
     <div class="mx-auto my-4 prose prose-catppuccin">
-        <img src={{image .Project.Image}} alt="Hero Image" class="rounded-xl"/>
+        <img src={{ imageFromID .Project.Image }} alt="Hero Image" class="rounded-xl"/>
         {{.ArticleHTML}}
     </div>
 {{ template "footer" }}

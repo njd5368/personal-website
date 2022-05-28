@@ -1008,6 +1008,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 1rem;
 }
 
+.my-6 {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
 .mt-12 {
   margin-top: 3rem;
 }
@@ -1068,12 +1073,24 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 24rem;
 }
 
+.h-10 {
+  height: 2.5rem;
+}
+
 .h-\[250px\] {
   height: 250px;
 }
 
 .h-\[125px\] {
   height: 125px;
+}
+
+.h-14 {
+  height: 3.5rem;
+}
+
+.h-\[69px\] {
+  height: 69px;
 }
 
 .h-16 {
@@ -1086,6 +1103,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .h-12 {
   height: 3rem;
+}
+
+.max-h-screen {
+  max-height: 100vh;
 }
 
 .min-h-screen {
@@ -1106,6 +1127,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-\[650px\] {
   width: 650px;
+}
+
+.w-\[650\] {
+  width: 650;
 }
 
 .w-3 {
@@ -1196,6 +1221,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   align-self: center;
 }
 
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
 .rounded-full {
   border-radius: 9999px;
 }
@@ -1206,6 +1235,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .rounded-2xl {
   border-radius: 1rem;
+}
+
+.rounded-t-2xl {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
 }
 
 .bg-gray-800 {
@@ -1232,6 +1266,26 @@ Ensure the default browser behavior of the `hidden` attribute.
      object-fit: cover;
 }
 
+.object-center {
+  -o-object-position: center;
+     object-position: center;
+}
+
+.px-3 {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+
+.px-6 {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+}
+
 .pr-4 {
   padding-right: 1rem;
 }
@@ -1246,6 +1300,14 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pl-3 {
+  padding-left: 0.75rem;
+}
+
+.pr-3 {
+  padding-right: 0.75rem;
 }
 
 .text-center {
@@ -1337,8 +1399,26 @@ Ensure the default browser behavior of the `hidden` attribute.
   outline-width: 2px;
 }
 
-.outline-blue {
-  outline-color: #96CDFB;
+.outline-gray-100 {
+  outline-color: #D9E0EE;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #1E1E2E;
+  outline-style: solid;
+  outline-width: 1px;
+  outline-color: #E8E9EA;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #E8E9EA;
+  border-radius: 100vh;
+  border: 3px solid #E8E9EA;
 }
 
 pre code.hljs {

@@ -2,6 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: #1E1E2E;
+    outline-style: solid;
+    outline-width: 1px;
+    outline-color: #E8E9EA;
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    background: #E8E9EA;
+    border-radius: 100vh;
+    border: 3px solid #E8E9EA;
+  }
+}
+
 pre code.hljs {
     display: block;
     overflow-x: auto;

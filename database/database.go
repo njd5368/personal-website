@@ -190,6 +190,7 @@ func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
 		GROUP BY ProjectTechnologyID
 	)
 	ON Project.ID=ProjectTechnologyID
+	ORDER BY Project.Date DESC
 	`
 	r, err := d.db.Query(query)
 	if err != nil {

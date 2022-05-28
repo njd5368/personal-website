@@ -10,6 +10,8 @@ import (
 	"nicholas-deary/handlers"
 	"nicholas-deary/middleware"
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
@@ -25,8 +27,27 @@ func init() {
 	if err != nil {
 		log.Panic(err)
 	}
-	t := template.New("").Funcs(template.FuncMap{
-        "image": func(i int64) string { return  c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/image/" + strconv.FormatInt(i, 10)},
+
+	t = template.New("").Funcs(template.FuncMap{
+        "imageFromID": func(i int64) string {
+			return c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/image/" + strconv.FormatInt(i, 10)
+		},
+		"fmtDate": func(d string) string {
+			t, err := time.Parse("2006-01-02", d)
+			if err != nil {
+				return d
+			}
+			return t.Format("Jan 02, 2006")
+		},
+		"projectColor": func(p string) string {
+			colors := map[string]string{
+				"personal": "#F28FAD",
+				"hackathon": "#F8BD96",
+				"professional": "#ABE9B3",
+				"academic": "#96CDFB",
+			}
+			return colors[strings.ToLower(p)]
+		},
     })
 	t = template.Must(t.ParseGlob("site/templates/util/*"))
 	t = template.Must(t.ParseGlob("site/templates/pages/*"))

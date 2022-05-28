@@ -1,10 +1,22 @@
 {{ template "header" }}
     {{ template "navbar" . }}
-    <div class="mx-auto my-4 space-y-4">
+    <input class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
+    <div class="overflow-y-scroll px-6 py-1 mx-auto my-4 space-y-4 max-h-screen scrollbar">
     {{ range .Projects}}
-        <div class="h-[250px] w-[650px] bg-gray-800 outline outline-2 outline-blue rounded-2xl">
-            <img src={{.HeroImage}} alt="Hero Image" class="h-[125px] w-[650px]"/>
-        </div>
+    <div>
+        <a href="/projects/{{.Name}}">
+            <div class="h-[250px] w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ projectColor .Type }}">
+                <img src={{ imageFromID .Image }} alt="Hero Image" class="h-[125px] w-[650px] rounded-t-2xl object-cover object-center"/>
+                <div class="container flex justify-between h-14 w-[650] items-center">
+                    <h1 class="pl-3 text-xl" style="color: {{ projectColor .Type }}">{{.Name}}</h1>
+                    <p class="pr-3">{{ fmtDate .Date }}</p>
+                </div>
+                <div class="h-[69px] w-[650px] px-3">
+                    <p>{{.Description}}</p>
+                </div>
+            </div>
+        </a>
+    </div>
     {{ end }}  
     </div>
 {{ template "footer" }}
