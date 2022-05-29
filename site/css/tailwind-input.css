@@ -18,7 +18,14 @@
   .scrollbar::-webkit-scrollbar-thumb {
     background: #E8E9EA;
     border-radius: 100vh;
-    border: 3px solid #E8E9EA;
+    border: 1px solid #E8E9EA;
+  }
+
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
   }
 }
 

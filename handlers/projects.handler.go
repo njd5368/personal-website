@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"net/url"
 	"regexp"
+	"strconv"
+	"strings"
 
 	"nicholas-deary/config"
 	"nicholas-deary/database"
@@ -29,7 +31,31 @@ type ProjectData struct {
 }
 
 func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
-	p, err := d.GetProjects()
+	values := r.URL.Query()
+	page := 1
+	search := values.Get("search")
+	types := []string{}
+	languages := []string{}
+	technologies := []string{}
+
+	if values.Has("page") {
+		t, err := strconv.Atoi(values.Get("page"))
+		if err == nil {
+			page = t
+		}
+	}
+
+	if values.Has("types") {
+		types = strings.Split(values.Get("types"), ",")
+	}
+	if values.Has("languages") {
+		languages = strings.Split(values.Get("languages"), ",")
+	}
+	if values.Has("technologies") {
+		technologies = strings.Split(values.Get("technologies"), ",")
+	}
+
+	p, err := d.GetProjects(page, search, types, languages, technologies)
 	if err != nil {
 		log.Print(err)
 		return

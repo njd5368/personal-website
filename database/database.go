@@ -170,8 +170,16 @@ func (d *SQLiteDatabase) CreateProject(p Project, i []byte) (*Project, error) {
 	return &p, nil
 }
 
-func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
-	query := `
+// GetProjects returns up to 10 projects that meet the required parameters.
+//
+// page (int): the page number for pagination. If less than, 1, defaults to 1. If over the max pages, an empty Project struct is returned.
+// 
+func (d *SQLiteDatabase) GetProjects(page int, search string, types []string, languages []string, technologies []string) ([]Project, error) {
+	if page < 1 {
+		page = 1
+	}
+	
+	selectClause := `
 	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Languages, Technologies
 	FROM Project
 	LEFT JOIN (
@@ -190,8 +198,43 @@ func (d *SQLiteDatabase) GetProjects() ([]Project, error) {
 		GROUP BY ProjectTechnologyID
 	)
 	ON Project.ID=ProjectTechnologyID
-	ORDER BY Project.Date DESC
 	`
+	whereClause := `
+	WHERE Project.Name LIKE '%` + search + `%'
+	`
+
+	if len(types) != 0 {
+		whereClause += `
+		AND Project.Type IN (`
+		for i, t := range(types) {
+			if i != 0 {
+				whereClause += `, `
+			}
+			whereClause += `'` + t + `'`
+		}
+		whereClause += `)`
+	}
+
+	for _, l := range(languages) {
+		whereClause += `
+		AND Languages LIKE '%` + l + `%'
+		`
+	}
+
+	for _, t := range(technologies) {
+		whereClause += `
+		AND Technologies LIKE '%` + t + `%'
+		`
+	}
+
+	orderByClause := `
+	ORDER BY Project.Date DESC, Project.ID DESC
+	`
+	limitClause := `
+	LIMIT 10
+	`
+
+	query := selectClause + whereClause + orderByClause + limitClause
 	r, err := d.db.Query(query)
 	if err != nil {
 		return nil, err
