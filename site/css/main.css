@@ -1037,14 +1037,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: 1rem;
 }
 
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
-.mt-1 {
-  margin-top: 0.25rem;
-}
-
 .mb-4 {
   margin-bottom: 1rem;
 }
@@ -1121,10 +1113,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 0.75rem;
 }
 
-.max-h-screen {
-  max-height: 100vh;
-}
-
 .min-h-screen {
   min-height: 100vh;
 }
@@ -1167,6 +1155,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-16 {
   width: 4rem;
+}
+
+.max-w-\[550px\] {
+  max-width: 550px;
 }
 
 .grid-cols-6 {
@@ -1245,10 +1237,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   overflow: hidden;
 }
 
-.overflow-y-scroll {
-  overflow-y: scroll;
-}
-
 .text-ellipsis {
   text-overflow: ellipsis;
 }
@@ -1289,6 +1277,19 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-bottom-left-radius: 1rem;
 }
 
+.border-2 {
+  border-width: 2px;
+}
+
+.border-solid {
+  border-style: solid;
+}
+
+.border-gray-100 {
+  --tw-border-opacity: 1;
+  border-color: rgb(217 224 238 / var(--tw-border-opacity));
+}
+
 .bg-gray-800 {
   --tw-bg-opacity: 1;
   background-color: rgb(26 24 38 / var(--tw-bg-opacity));
@@ -1321,16 +1322,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
-}
-
-.px-6 {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-}
-
-.py-1 {
-  padding-top: 0.25rem;
-  padding-bottom: 0.25rem;
 }
 
 .pr-4 {
@@ -1398,6 +1389,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   font-weight: 700;
 }
 
+.font-extrabold {
+  font-weight: 800;
+}
+
 .font-light {
   font-weight: 300;
 }
@@ -1410,6 +1405,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .text-gray-100 {
   --tw-text-opacity: 1;
   color: rgb(217 224 238 / var(--tw-text-opacity));
+}
+
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 .text-red {
@@ -1448,24 +1448,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .outline-gray-100 {
   outline-color: #D9E0EE;
-}
-
-.scrollbar::-webkit-scrollbar {
-  width: 8px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  border-radius: 100vh;
-  background: #1E1E2E;
-  outline-style: solid;
-  outline-width: 1px;
-  outline-color: #E8E9EA;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background: #E8E9EA;
-  border-radius: 100vh;
-  border: 1px solid #E8E9EA;
 }
 
 .line-clamp-3 {

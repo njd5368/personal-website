@@ -48,6 +48,37 @@ func init() {
 			}
 			return colors[strings.ToLower(p)]
 		},
+		"getPageNumbers": func(c int, t int) []string {
+			if c < 1 || t < 1 {
+				return []string{}
+			}
+			result := []string{}
+			if t < 12 {
+				for i := 1; i <= t; i++ {
+					result = append(result, strconv.Itoa(i))
+				}
+			} else if c < 7 {
+				for i := 1; i <= 9; i ++ {
+					result = append(result, strconv.Itoa(i))
+				}
+				result = append(result, "...", strconv.Itoa(t))
+			} else if t - c < 6 {
+				result = append(result, "1", "...")
+				for i := t - 8; i <= t; i++ {
+					result = append(result, strconv.Itoa(i))
+				}
+			} else {
+				result = append(result, "1", "...")
+				for i := c - 3; i <= c + 3; i++ {
+					result = append(result, strconv.Itoa(i))
+				}
+				result = append(result, "...", strconv.Itoa(t))
+			}
+			return result
+		},
+		"intToString": func(i int) string {
+			return strconv.Itoa(i)
+		},
     })
 	t = template.Must(t.ParseGlob("site/templates/util/*"))
 	t = template.Must(t.ParseGlob("site/templates/pages/*"))

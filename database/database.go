@@ -256,6 +256,19 @@ func (d *SQLiteDatabase) GetProjects(page int, search string, types []string, la
 	return projects, nil
 }
 
+func (d *SQLiteDatabase) GetProjectCount() int {
+	query := `SELECT COUNT(*) FROM Project;`
+	r := d.db.QueryRow(query)
+	if r.Err() == sql.ErrNoRows {
+		return 0
+	}
+	var result int
+	if err := r.Scan(&result); err != nil {
+		return 0
+	}
+	return result
+}
+
 func (d *SQLiteDatabase) GetProjectByName(n string) (*Project, error) {
 	query := `
 	SELECT Project.ID, Project.Name, Project.Description, Project.Date, Project.Type, Project.Image, Project.File, Languages, Technologies

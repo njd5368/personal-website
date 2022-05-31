@@ -1,17 +1,22 @@
 {{ template "header" }}
     {{ template "navbar" . }}
     <input class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
-    <div class="flex justify-between items-center mt-4 mb-1 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
+    <div class="flex justify-between items-center mt-4 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
         <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❮</button>
         <div class="flex items-center h-[50px] max-w-[550px]">
-            
+            {{ $CP := intToString .CurrentPage }}
+            {{ $PN := getPageNumbers .CurrentPage .TotalPages }}
+            {{ range $PN }}
+                {{ if eq . $CP }}
+                    <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
+                {{ else }}
+                    <span class="w-[50px] text-center">{{.}}</span>
+                {{ end }}
+            {{ end }}
         </div>
         <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❯</button>
     </div>
-    <div class="overflow-y-scroll px-6 py-1 mx-auto space-y-4 max-h-screen scrollbar" style="overflow-y: overlay"> 
-    <!-- You may have noticed the 'overflow-y-scroll' in the tailwind classes and the 'overflow-y: overlay' in the styling. The tailwind class is used by Firefox to make
-         a proper scroll box. The styling is used by Chrome to center the div and not include the scroll bar as part of the width. Maybe not the best solution, but its
-         the best I have. --> 
+    <div class="mx-auto my-4 space-y-4"> 
     {{ range .Projects}}
     <div>
         <a href="/projects/{{.Name}}">
@@ -29,8 +34,17 @@
     </div>
     {{ end }}  
     </div>
-    <div class="flex justify-between items-center mt-1 mb-4 h-[50px] w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
+    <div class="flex justify-between items-center mb-4 h-[50px] w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
         <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❮</button>
+        <div class="flex items-center h-[50px] max-w-[550px]">
+            {{ range $PN }}
+                {{ if eq . $CP }}
+                    <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
+                {{ else }}
+                    <span class="w-[50px] text-center">{{.}}</span>
+                {{ end }}
+            {{ end }}
+        </div>
         <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❯</button>
     </div>
 {{ template "footer" }}

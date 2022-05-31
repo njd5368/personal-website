@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"net/url"
 	"regexp"
@@ -20,13 +21,15 @@ import (
 )
 
 type ProjectsData struct {
-	Page string
-	Projects []database.Project
+	Page        string
+	Projects    []database.Project
+	CurrentPage int
+	TotalPages  int
 }
 
 type ProjectData struct {
-	Page string
-	Project *database.Project
+	Page        string
+	Project     *database.Project
 	ArticleHTML template.HTML
 }
 
@@ -39,9 +42,9 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	technologies := []string{}
 
 	if values.Has("page") {
-		t, err := strconv.Atoi(values.Get("page"))
+		tmpPage, err := strconv.Atoi(values.Get("page"))
 		if err == nil {
-			page = t
+			page = tmpPage
 		}
 	}
 
@@ -62,8 +65,12 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	}
 	log.Print(p)
 
-	err = t.ExecuteTemplate(w, "projects.gohtml", ProjectsData{Page: "/projects", Projects: p})
-
+	err = t.ExecuteTemplate(w, "projects.gohtml", ProjectsData{
+		Page: "/projects", 
+		Projects: p, 
+		CurrentPage: page, 
+		TotalPages: int(math.Ceil(float64(d.GetProjectCount()) / 10)),
+	})
 	if err != nil {
 		log.Print(err)
 		return
@@ -83,7 +90,7 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t 
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	
+
 	p, err := d.GetProjectByName(name)
 	if err != nil {
 		log.Print(err)
@@ -104,13 +111,13 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t 
 }
 
 func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLiteDatabase) {
-	var body struct{
+	var body struct {
 		ID          int64  `json:"id"`
 		Name        string `json:"name"`
 		Description string `json:"description"`
 		Date        string `json:"date"`
 		Type        string `json:"type"`
-		Image       []byte  `json:"image"`
+		Image       []byte `json:"image"`
 
 		Languages    []string `json:"languages"`
 		Technologies []string `json:"technologies"`
@@ -133,13 +140,13 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 	}
 
 	p := database.Project{
-		ID: body.ID,
-		Name: body.Name,
+		ID:          body.ID,
+		Name:        body.Name,
 		Description: body.Description,
-		Date: body.Date,
-		Type: body.Type,
+		Date:        body.Date,
+		Type:        body.Type,
 
-		Languages: body.Languages,
+		Languages:    body.Languages,
 		Technologies: body.Technologies,
 
 		File: body.File,
@@ -158,5 +165,5 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 }
 
 func getHTMLRenderer() {
-	
+
 }
