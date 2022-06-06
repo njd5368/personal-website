@@ -10,16 +10,19 @@
             {{ else }}
             <a href="/" class="inline-block text-xl text-center text-gray-100 hover:text-red">Home</a>
             {{ end }}
+            
             {{ if eq "/about" .Page }}
             <a href="/about" class="inline-block text-xl text-center text-yellow">About</a>
             {{ else }}
             <a href="/about" class="inline-block text-xl text-center text-gray-100 hover:text-yellow">About</a>
             {{ end }}
+            
             {{ if eq "/projects" .Page }}
             <a href="/projects" class="inline-block text-xl text-center text-green">Projects</a>
             {{ else }}
             <a href="/projects" class="inline-block text-xl text-center text-gray-100 hover:text-green">Projects</a>
             {{ end }}
+            
             {{ if eq "/blog" .Page }}
             <a href="/blog" class="inline-block text-xl text-center text-blue">Blog</a>
             {{ else }}

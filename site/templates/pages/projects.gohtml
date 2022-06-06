@@ -2,7 +2,12 @@
     {{ template "navbar" . }}
     <input class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
     <div class="flex justify-between items-center mt-4 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
-        <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❮</button>
+
+        <a href="{{.LastPage}}">
+            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                <span class="inline-block">❮</span>
+            </div>
+        </a>
         <div class="flex items-center h-[50px] max-w-[550px]">
             {{ $CP := intToString .CurrentPage }}
             {{ $PN := getPageNumbers .CurrentPage .TotalPages }}
@@ -14,7 +19,11 @@
                 {{ end }}
             {{ end }}
         </div>
-        <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❯</button>
+        <a href="{{.NextPage}}">
+            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                <span class="inline-block">❯</span>
+            </div>
+        </a>
     </div>
     <div class="mx-auto my-4 space-y-4"> 
     {{ range .Projects}}
@@ -35,7 +44,11 @@
     {{ end }}  
     </div>
     <div class="flex justify-between items-center mb-4 h-[50px] w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
-        <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❮</button>
+        <a href="{{.LastPage}}">
+            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                <span class="inline-block">❮</span>
+            </div>
+        </a>
         <div class="flex items-center h-[50px] max-w-[550px]">
             {{ range $PN }}
                 {{ if eq . $CP }}
@@ -45,6 +58,10 @@
                 {{ end }}
             {{ end }}
         </div>
-        <button class="h-[50px] w-[50px] text-center hover:text-white hover:text-lg">❯</button>
+        <a href="{{.NextPage}}">
+            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                <span class="inline-block">❯</span>
+            </div>
+        </a>
     </div>
 {{ template "footer" }}

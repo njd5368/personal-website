@@ -174,9 +174,13 @@ func (d *SQLiteDatabase) CreateProject(p Project, i []byte) (*Project, error) {
 //
 // page (int): the page number for pagination. If less than, 1, defaults to 1. If over the max pages, an empty Project struct is returned.
 // 
-func (d *SQLiteDatabase) GetProjects(page int, search string, types []string, languages []string, technologies []string) ([]Project, error) {
+func (d *SQLiteDatabase) GetProjects(page int, search string, types []string, languages []string, technologies []string, first string, last string) ([]Project, error) {
 	if page < 1 {
 		page = 1
+	}
+	if len(first) != 0 && len(last) != 0 {
+		first = ""
+		last = ""
 	}
 	
 	selectClause := `
@@ -230,9 +234,31 @@ func (d *SQLiteDatabase) GetProjects(page int, search string, types []string, la
 	orderByClause := `
 	ORDER BY Project.Date DESC, Project.ID DESC
 	`
+
+	if len(first) != 0 {
+		firstList := strings.Split(first, " ")
+		whereClause += `
+		AND (Project.Date > '` + firstList[0] + `' OR (Project.Date = '` + firstList[0] + `' AND Project.ID > ` + firstList[1] + `))
+		`
+		orderByClause = `
+		ORDER BY Project.Date ASC, Project.ID ASC
+		`
+	}
+
+	if len(last) != 0 {
+		lastList := strings.Split(last, " ")
+		whereClause += `
+		AND (Project.Date < '` + lastList[0] + `' OR (Project.Date = '` + lastList[0] + `' AND Project.ID < ` + lastList[1] + `))
+		`
+	}
+
 	limitClause := `
 	LIMIT 10
 	`
+	if len(first) == 0 && len(last) == 0 {
+		limitClause += `
+		OFFSET ` + strconv.Itoa((page - 1) * 10)
+	}
 
 	query := selectClause + whereClause + orderByClause + limitClause
 	r, err := d.db.Query(query)
@@ -253,11 +279,67 @@ func (d *SQLiteDatabase) GetProjects(page int, search string, types []string, la
 		p.Technologies = strings.Split(techs, ",")
 		projects = append(projects, p)
 	}
+
+	if len(first) != 0 {
+		for i, j := 0, len(projects)-1; i < j; i, j = i+1, j-1 {
+			projects[i], projects[j] = projects[j], projects[i]
+		}
+	}
+
 	return projects, nil
 }
 
-func (d *SQLiteDatabase) GetProjectCount() int {
-	query := `SELECT COUNT(*) FROM Project;`
+func (d *SQLiteDatabase) GetProjectCount(search string, types []string, languages []string, technologies []string) int {
+	query := `
+	SELECT COUNT(*) 
+	FROM Project
+	LEFT JOIN (
+		SELECT ProjectLanguage.Project AS ProjectLanguageID, GROUP_CONCAT(Language.Name) AS Languages
+		FROM ProjectLanguage
+		LEFT JOIN Language
+		ON ProjectLanguage.Language=Language.ID
+		GROUP BY ProjectLanguageID
+	)
+	ON Project.ID=ProjectLanguageID
+	LEFT JOIN (
+		SELECT ProjectTechnology.Project AS ProjectTechnologyID, GROUP_CONCAT(Technology.Name) AS Technologies
+		FROM ProjectTechnology
+		LEFT JOIN Technology
+		ON ProjectTechnology.Technology=Technology.ID
+		GROUP BY ProjectTechnologyID
+	)
+	ON Project.ID=ProjectTechnologyID
+	`
+	query += `
+	WHERE Project.Name LIKE '%` + search + `%'
+	`
+
+	if len(types) != 0 {
+		query += `
+		AND Project.Type IN (`
+		for i, t := range(types) {
+			if i != 0 {
+				query += `, `
+			}
+			query += `'` + t + `'`
+		}
+		query += `)`
+	}
+
+	for _, l := range(languages) {
+		query += `
+		AND Languages LIKE '%` + l + `%'
+		`
+	}
+
+	for _, t := range(technologies) {
+		query += `
+		AND Technologies LIKE '%` + t + `%'
+		`
+	}
+
+	query += `;`
+
 	r := d.db.QueryRow(query)
 	if r.Err() == sql.ErrNoRows {
 		return 0

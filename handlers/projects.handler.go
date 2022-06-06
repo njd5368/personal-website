@@ -25,6 +25,8 @@ type ProjectsData struct {
 	Projects    []database.Project
 	CurrentPage int
 	TotalPages  int
+	LastPage	string
+	NextPage	string
 }
 
 type ProjectData struct {
@@ -40,13 +42,8 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	types := []string{}
 	languages := []string{}
 	technologies := []string{}
-
-	if values.Has("page") {
-		tmpPage, err := strconv.Atoi(values.Get("page"))
-		if err == nil {
-			page = tmpPage
-		}
-	}
+	first := ""
+	last := ""
 
 	if values.Has("types") {
 		types = strings.Split(values.Get("types"), ",")
@@ -58,18 +55,61 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 		technologies = strings.Split(values.Get("technologies"), ",")
 	}
 
-	p, err := d.GetProjects(page, search, types, languages, technologies)
+	totalPages := int(math.Ceil(float64(d.GetProjectCount(search, types, languages, technologies)) / 10))
+
+	if values.Has("page") {
+		tmpPage, err := strconv.Atoi(values.Get("page"))
+		if err == nil {
+			if tmpPage < 1 {
+				page = 1
+			} else if tmpPage > totalPages {
+				page = totalPages
+			} else {
+				page = tmpPage
+			}
+		}
+	}
+
+	if values.Has("f") {
+		first = values.Get("f")
+	}
+	if values.Has("l") {
+		last = values.Get("l")
+	}
+	
+	p, err := d.GetProjects(page, search, types, languages, technologies, first, last)
 	if err != nil {
 		log.Print(err)
 		return
 	}
-	log.Print(p)
+
+	var lastPage string
+	if page != 1 {
+		values.Del("l")
+		values.Set("f", p[0].Date + " " + strconv.FormatInt(p[0].ID, 10))
+		values.Set("page", strconv.Itoa(page - 1))
+		lastPage = "/projects?" + values.Encode()
+	} else {
+		lastPage = "#"
+	}
+	
+	var nextPage string
+	if page < totalPages {
+		values.Del("f")
+		values.Set("l", p[len(p) - 1].Date + " " + strconv.FormatInt(p[len(p) - 1].ID, 10))
+		values.Set("page", strconv.Itoa(page + 1))
+		nextPage = "/projects?" + values.Encode()
+	} else {
+		nextPage = "#"
+	}
 
 	err = t.ExecuteTemplate(w, "projects.gohtml", ProjectsData{
 		Page: "/projects", 
 		Projects: p, 
 		CurrentPage: page, 
-		TotalPages: int(math.Ceil(float64(d.GetProjectCount()) / 10)),
+		TotalPages: totalPages,
+		LastPage: lastPage,
+		NextPage: nextPage,
 	})
 	if err != nil {
 		log.Print(err)
