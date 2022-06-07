@@ -1,67 +1,134 @@
 {{ template "header" }}
     {{ template "navbar" . }}
-    <input class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
-    <div class="flex justify-between items-center mt-4 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
+    <form class="w-screen" action="/projects" method="get">
+        <div class="flex">
+            <div class="inline-block mt-32 ml-auto">
+                <h3 class="text-lg text-gray-100">Filters</h3>
+                <hr>
+                <div class="my-2 space-y-2">
+                    <label class="block relative pl-8 cursor-pointer checkmark-red">Personal Projects
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Personal" {{ checked "Personal" .Types }}>
+                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-red outline-2 hover:bg-gray-900 checkmark"></span>
+                    </label>
+                    <label class="block relative pl-8 cursor-pointer checkmark-yellow">Hackathon Projects
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Hackathon" {{ checked "Hackathon" .Types }}>
+                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-yellow outline-2 hover:bg-gray-900 checkmark"></span>
+                    </label>
+                    <label class="block relative pl-8 cursor-pointer checkmark-green">Professional Projects
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Professional" {{ checked "Professional" .Types }}>
+                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-green outline-2 hover:bg-gray-900 checkmark"></span>
+                    </label>
+                    <label class="block relative pl-8 cursor-pointer checkmark-blue">Academic Projects
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Academic" {{ checked "Academic" .Types }}>
+                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-blue outline-2 hover:bg-gray-900 checkmark"></span>
+                    </label>
+                </div>
+                <hr>
+                <label class="block relative pl-4 cursor-pointer" for="languages">Programming Languages
+                    <input class="absolute w-0 h-0 opacity-0 cursor-pointer languages-menu-toggle" type="checkbox" id="languages" {{ expanded .Languages }}>
+                    <span class="absolute top-0 left-0 text-sm languages-menu-up">▼</span>
+                    <span class="absolute top-0 left-0 text-sm languages-menu-down">▲</span>
+                    <div class="overflow-hidden max-h-0 languages-menu-content">
+                        {{ $L := .Languages }}
+                        <ul class="my-2 space-y-1">
+                            {{ range .AllLanguages }}
+                                <li class="pl-1">
+                                    <label class="block relative pl-6 cursor-pointer checkmark-gray-100">{{ . }}
+                                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="languages" value="{{ . }}" {{ checked . $L }}>
+                                        <span class="absolute left-0 top-[6px] w-3 h-3 bg-gray-700 rounded-sm outline outline-gray-100 outline-2 hover:bg-gray-900 checkmark"></span>
+                                    </label>
+                                </li>
+                            {{ end }} 
+                        </ul>
+                    </div>
+                </label>
+                <label class="block relative pl-4 cursor-pointer" for="technologies">Technologies
+                    <input class="absolute w-0 h-0 opacity-0 cursor-pointer technologies-menu-toggle" type="checkbox" id="technologies" {{ expanded .Technologies }}>
+                    <span class="absolute top-0 left-0 text-sm technologies-menu-up">▼</span>
+                    <span class="absolute top-0 left-0 text-sm technologies-menu-down">▲</span>
+                    <div class="overflow-hidden max-h-0 technologies-menu-content">
+                        {{ $T := .Technologies }}
+                        <ul class="my-2 space-y-1">
+                            {{ range .AllTechnologies }}
+                                <li class="pl-1">
+                                    <label class="block relative pl-6 cursor-pointer checkmark-gray-100">{{ . }}
+                                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="technologies" value="{{ . }}" {{ checked . $T }}>
+                                        <span class="absolute left-0 top-[6px] w-3 h-3 bg-gray-700 rounded-sm outline outline-gray-100 outline-2 hover:bg-gray-900 checkmark"></span>
+                                    </label>
+                                </li>
+                            {{ end }} 
+                        </ul>
+                    </div>
+                </label>
+                <input class="px-2 my-4 text-gray-100 rounded-2xl outline outline-gray-100 outline-2 hover:bg-gray-100 hover:text-gray-700" type="submit" value="Apply">
+            </div>
+            <div class="w-[650] inline-block mx-12">
+                <input name="search" value="{{ .Search }}" class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
+                <div class="flex justify-between items-center mt-4 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
 
-        <a href="{{.LastPage}}">
-            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
-                <span class="inline-block">❮</span>
-            </div>
-        </a>
-        <div class="flex items-center h-[50px] max-w-[550px]">
-            {{ $CP := intToString .CurrentPage }}
-            {{ $PN := getPageNumbers .CurrentPage .TotalPages }}
-            {{ range $PN }}
-                {{ if eq . $CP }}
-                    <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
-                {{ else }}
-                    <span class="w-[50px] text-center">{{.}}</span>
-                {{ end }}
-            {{ end }}
-        </div>
-        <a href="{{.NextPage}}">
-            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
-                <span class="inline-block">❯</span>
-            </div>
-        </a>
-    </div>
-    <div class="mx-auto my-4 space-y-4"> 
-    {{ range .Projects}}
-    <div>
-        <a href="/projects/{{.Name}}">
-            <div class="h-[250px] w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ projectColor .Type }}">
-                <img src={{ imageFromID .Image }} alt="Hero Image" class="h-[125px] w-[650px] rounded-t-2xl object-cover object-center"/>
-                <div class="container flex justify-between h-12 w-[650] items-center">
-                    <h1 class="overflow-hidden pl-3 text-xl whitespace-nowrap text-ellipsis" style="color: {{ projectColor .Type }}">{{.Name}}</h1>
-                    <p class="pr-3 whitespace-nowrap">{{ fmtDate .Date }}</p>
+                    <a href="{{.LastPage}}">
+                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                            <span class="inline-block">❮</span>
+                        </div>
+                    </a>
+                    <div class="flex items-center h-[50px] max-w-[550px]">
+                        {{ $CP := intToString .CurrentPage }}
+                        {{ $PN := getPageNumbers .CurrentPage .TotalPages }}
+                        {{ range $PN }}
+                            {{ if eq . $CP }}
+                                <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
+                            {{ else }}
+                                <span class="w-[50px] text-center">{{.}}</span>
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                    <a href="{{.NextPage}}">
+                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                            <span class="inline-block">❯</span>
+                        </div>
+                    </a>
                 </div>
-                <div class="h-[69px] w-[650px] px-3">
-                    <p class="line-clamp-3">{{.Description}}</p>
+                <div class="mx-auto my-4 space-y-4"> 
+                {{ range .Projects}}
+                <div>
+                    <a href="/projects/{{.Name}}">
+                        <div class="h-[250px] w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ projectColor .Type }}">
+                            <img src={{ imageFromID .Image }} alt="Hero Image" class="h-[125px] w-[650px] rounded-t-2xl object-cover object-center"/>
+                            <div class="container flex justify-between h-12 w-[650] items-center">
+                                <h1 class="overflow-hidden pl-3 text-xl whitespace-nowrap text-ellipsis" style="color: {{ projectColor .Type }}">{{.Name}}</h1>
+                                <p class="pr-3 whitespace-nowrap">{{ fmtDate .Date }}</p>
+                            </div>
+                            <div class="h-[69px] w-[650px] px-3">
+                                <p class="line-clamp-3">{{.Description}}</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {{ end }}  
+                </div>
+                <div class="flex justify-between items-center mb-4 h-[50px] w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
+                    <a href="{{.LastPage}}">
+                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                            <span class="inline-block">❮</span>
+                        </div>
+                    </a>
+                    <div class="flex items-center h-[50px] max-w-[550px]">
+                        {{ range $PN }}
+                            {{ if eq . $CP }}
+                                <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
+                            {{ else }}
+                                <span class="w-[50px] text-center">{{.}}</span>
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                    <a href="{{.NextPage}}">
+                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                            <span class="inline-block">❯</span>
+                        </div>
+                    </a>
                 </div>
             </div>
-        </a>
-    </div>
-    {{ end }}  
-    </div>
-    <div class="flex justify-between items-center mb-4 h-[50px] w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
-        <a href="{{.LastPage}}">
-            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
-                <span class="inline-block">❮</span>
-            </div>
-        </a>
-        <div class="flex items-center h-[50px] max-w-[550px]">
-            {{ range $PN }}
-                {{ if eq . $CP }}
-                    <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
-                {{ else }}
-                    <span class="w-[50px] text-center">{{.}}</span>
-                {{ end }}
-            {{ end }}
+            <div class="inline-block mr-auto"></div>
         </div>
-        <a href="{{.NextPage}}">
-            <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
-                <span class="inline-block">❯</span>
-            </div>
-        </a>
-    </div>
+    </form>
 {{ template "footer" }}

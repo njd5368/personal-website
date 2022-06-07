@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
-	"strings"
 
 	"nicholas-deary/config"
 	"nicholas-deary/database"
@@ -21,12 +20,18 @@ import (
 )
 
 type ProjectsData struct {
-	Page        string
-	Projects    []database.Project
-	CurrentPage int
-	TotalPages  int
-	LastPage	string
-	NextPage	string
+	Page        	string
+	Search 			string
+	Types 			[]string
+	Languages		[]string
+	AllLanguages 	[]string
+	Technologies	[]string
+	AllTechnologies []string
+	Projects    	[]database.Project
+	CurrentPage 	int
+	TotalPages  	int
+	LastPage		string
+	NextPage		string
 }
 
 type ProjectData struct {
@@ -46,13 +51,23 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	last := ""
 
 	if values.Has("types") {
-		types = strings.Split(values.Get("types"), ",")
+		types = values["types"]
 	}
 	if values.Has("languages") {
-		languages = strings.Split(values.Get("languages"), ",")
+		languages = values["languages"]
 	}
 	if values.Has("technologies") {
-		technologies = strings.Split(values.Get("technologies"), ",")
+		technologies = values["technologies"]
+	}
+
+	allLanguages, err := d.GetAllLanguages()
+	if err != nil {
+		allLanguages = []string{}
+	}
+
+	allTechnologies, err := d.GetAllTechnologies()
+	if err != nil {
+		allTechnologies = []string{}
 	}
 
 	totalPages := int(math.Ceil(float64(d.GetProjectCount(search, types, languages, technologies)) / 10))
@@ -104,12 +119,18 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	}
 
 	err = t.ExecuteTemplate(w, "projects.gohtml", ProjectsData{
-		Page: "/projects", 
-		Projects: p, 
-		CurrentPage: page, 
-		TotalPages: totalPages,
-		LastPage: lastPage,
-		NextPage: nextPage,
+		Page: 				"/projects", 
+		Projects: 			p,
+		Search: 			search,
+		Types: 				types,
+		Languages: 			languages,
+		AllLanguages: 		allLanguages,
+		Technologies: 		technologies,
+		AllTechnologies:	allTechnologies,
+		CurrentPage: 		page, 
+		TotalPages: 		totalPages,
+		LastPage: 			lastPage,
+		NextPage: 			nextPage,
 	})
 	if err != nil {
 		log.Print(err)

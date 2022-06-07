@@ -27,6 +27,58 @@
     -webkit-box-orient: vertical;  
     overflow: hidden;
   }
+
+  .checkmark-red input:checked ~ .checkmark {
+    background-color: #F28FAD;
+  }
+
+  .checkmark-yellow input:checked ~ .checkmark {
+    background-color: #FAE3B0;
+  }
+
+  .checkmark-green input:checked ~ .checkmark {
+    background-color: #ABE9B3;
+  }
+
+  .checkmark-blue input:checked ~ .checkmark {
+    background-color: #96CDFB;
+  }
+
+  .checkmark-gray-100 input:checked ~ .checkmark {
+    background-color: #D9E0EE;
+  }
+
+  .languages-menu-toggle:checked ~ .languages-menu-content {
+    max-height: 100%;
+  }
+  .languages-menu-up {
+    display: inline;
+  }
+  .languages-menu-toggle:checked ~ .languages-menu-up {
+    display: none;
+  }
+  .languages-menu-down {
+    display: none;
+  }
+  .languages-menu-toggle:checked ~ .languages-menu-down {
+    display: inline;
+  }
+
+  .technologies-menu-toggle:checked ~ .technologies-menu-content {
+    max-height: 100%;
+  }
+  .technologies-menu-up {
+    display: inline;
+  }
+  .technologies-menu-toggle:checked ~ .technologies-menu-up {
+    display: none;
+  }
+  .technologies-menu-down {
+    display: none;
+  }
+  .technologies-menu-toggle:checked ~ .technologies-menu-down {
+    display: inline;
+  }
 }
 
 pre code.hljs {

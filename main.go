@@ -15,6 +15,7 @@ import (
 
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
+	"golang.org/x/exp/slices"
 )
 
 const databaseFile = "blog.db"
@@ -78,6 +79,18 @@ func init() {
 		},
 		"intToString": func(i int) string {
 			return strconv.Itoa(i)
+		},
+		"checked": func(s string, l []string) string {
+			if slices.Contains(l, s) {
+				return "checked"
+			}
+			return ""
+		},
+		"expanded": func(l []string) string {
+			if len(l) == 0 {
+				return ""
+			}
+			return "checked"
 		},
     })
 	t = template.Must(t.ParseGlob("site/templates/util/*"))

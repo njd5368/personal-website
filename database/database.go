@@ -390,6 +390,52 @@ func (d *SQLiteDatabase) GetProjectByName(n string) (*Project, error) {
 	return &p, nil
 }
 
+func (d *SQLiteDatabase) GetAllLanguages() ([]string, error) {
+	query := `
+	SELECT Name
+	FROM Language
+	ORDER BY Name ASC
+	`
+	r, err := d.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+
+	var languages []string
+	for r.Next() {
+		var language string
+		if err := r.Scan(&language); err != nil {
+			return nil, err
+		}
+		languages = append(languages, language)
+	}
+	return languages, nil
+}
+
+func (d *SQLiteDatabase) GetAllTechnologies() ([]string, error) {
+	query := `
+	SELECT Name
+	FROM Technology
+	ORDER BY Name ASC
+	`
+	r, err := d.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer r.Close()
+
+	var technologies []string
+	for r.Next() {
+		var technology string
+		if err := r.Scan(&technology); err != nil {
+			return nil, err
+		}
+		technologies = append(technologies, technology)
+	}
+	return technologies, nil
+}
+
 func (d *SQLiteDatabase) GetImageByID(id int) ([]byte, error) {
 	query := `
 	SELECT Image

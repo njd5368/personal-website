@@ -945,8 +945,24 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-prose-invert-td-borders: #D9E0EE;
 }
 
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
 .top-0 {
   top: 0px;
+}
+
+.left-0 {
+  left: 0px;
+}
+
+.top-\[6px\] {
+  top: 6px;
 }
 
 .col-span-2 {
@@ -993,6 +1009,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-row-start: 3;
 }
 
+.float-right {
+  float: right;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1006,6 +1026,16 @@ Ensure the default browser behavior of the `hidden` attribute.
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.mx-12 {
+  margin-left: 3rem;
+  margin-right: 3rem;
 }
 
 .my-6 {
@@ -1033,12 +1063,20 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 1.75rem;
 }
 
+.mt-32 {
+  margin-top: 8rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
 .mb-4 {
   margin-bottom: 1rem;
+}
+
+.mr-auto {
+  margin-right: auto;
 }
 
 .ml-26 {
@@ -1081,6 +1119,18 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 24rem;
 }
 
+.h-0 {
+  height: 0px;
+}
+
+.h-5 {
+  height: 1.25rem;
+}
+
+.h-3 {
+  height: 0.75rem;
+}
+
 .h-10 {
   height: 2.5rem;
 }
@@ -1109,8 +1159,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 4rem;
 }
 
-.h-3 {
-  height: 0.75rem;
+.max-h-0 {
+  max-height: 0px;
 }
 
 .min-h-screen {
@@ -1129,20 +1179,28 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 100vw;
 }
 
-.w-\[650px\] {
-  width: 650px;
+.w-0 {
+  width: 0px;
 }
 
-.w-\[50px\] {
-  width: 50px;
+.w-5 {
+  width: 1.25rem;
+}
+
+.w-3 {
+  width: 0.75rem;
 }
 
 .w-\[650\] {
   width: 650;
 }
 
-.w-3 {
-  width: 0.75rem;
+.w-\[650px\] {
+  width: 650px;
+}
+
+.w-\[50px\] {
+  width: 50px;
 }
 
 .w-auto {
@@ -1159,6 +1217,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .max-w-\[550px\] {
   max-width: 550px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .grid-cols-6 {
@@ -1203,6 +1265,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-space-y-reverse: 0;
   margin-top: calc(3rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(3rem * var(--tw-space-y-reverse));
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
 }
 
 .space-y-1 > :not([hidden]) ~ :not([hidden]) {
@@ -1251,6 +1319,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .rounded-xl {
   border-radius: 0.75rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
 }
 
 .rounded-2xl {
@@ -1319,6 +1391,11 @@ Ensure the default browser behavior of the `hidden` attribute.
      object-position: center;
 }
 
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1338,6 +1415,22 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pl-8 {
+  padding-left: 2rem;
+}
+
+.pl-4 {
+  padding-left: 1rem;
+}
+
+.pl-1 {
+  padding-left: 0.25rem;
+}
+
+.pl-6 {
+  padding-left: 1.5rem;
 }
 
 .pl-3 {
@@ -1376,6 +1469,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .text-xl {
   font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
   line-height: 1.75rem;
 }
 
@@ -1436,6 +1534,10 @@ Ensure the default browser behavior of the `hidden` attribute.
           text-decoration-line: underline;
 }
 
+.opacity-0 {
+  opacity: 0;
+}
+
 .shadow-md {
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
@@ -1450,6 +1552,22 @@ Ensure the default browser behavior of the `hidden` attribute.
   outline-width: 2px;
 }
 
+.outline-red {
+  outline-color: #F28FAD;
+}
+
+.outline-yellow {
+  outline-color: #FAE3B0;
+}
+
+.outline-green {
+  outline-color: #ABE9B3;
+}
+
+.outline-blue {
+  outline-color: #96CDFB;
+}
+
 .outline-gray-100 {
   outline-color: #D9E0EE;
 }
@@ -1459,6 +1577,66 @@ Ensure the default browser behavior of the `hidden` attribute.
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+.checkmark-red input:checked ~ .checkmark {
+  background-color: #F28FAD;
+}
+
+.checkmark-yellow input:checked ~ .checkmark {
+  background-color: #FAE3B0;
+}
+
+.checkmark-green input:checked ~ .checkmark {
+  background-color: #ABE9B3;
+}
+
+.checkmark-blue input:checked ~ .checkmark {
+  background-color: #96CDFB;
+}
+
+.checkmark-gray-100 input:checked ~ .checkmark {
+  background-color: #D9E0EE;
+}
+
+.languages-menu-toggle:checked ~ .languages-menu-content {
+  max-height: 100%;
+}
+
+.languages-menu-up {
+  display: inline;
+}
+
+.languages-menu-toggle:checked ~ .languages-menu-up {
+  display: none;
+}
+
+.languages-menu-down {
+  display: none;
+}
+
+.languages-menu-toggle:checked ~ .languages-menu-down {
+  display: inline;
+}
+
+.technologies-menu-toggle:checked ~ .technologies-menu-content {
+  max-height: 100%;
+}
+
+.technologies-menu-up {
+  display: inline;
+}
+
+.technologies-menu-toggle:checked ~ .technologies-menu-up {
+  display: none;
+}
+
+.technologies-menu-down {
+  display: none;
+}
+
+.technologies-menu-toggle:checked ~ .technologies-menu-down {
+  display: inline;
 }
 
 pre code.hljs {
@@ -1563,6 +1741,16 @@ code.hljs {
   font-weight: 700;
 }
 
+.hover\:bg-gray-900:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 19 32 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-gray-100:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(217 224 238 / var(--tw-bg-opacity));
+}
+
 .hover\:text-lg:hover {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -1571,6 +1759,11 @@ code.hljs {
 .hover\:text-blue:hover {
   --tw-text-opacity: 1;
   color: rgb(150 205 251 / var(--tw-text-opacity));
+}
+
+.hover\:text-gray-700:hover {
+  --tw-text-opacity: 1;
+  color: rgb(30 30 46 / var(--tw-text-opacity));
 }
 
 .hover\:text-white:hover {
