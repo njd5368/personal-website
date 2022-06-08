@@ -1,30 +1,30 @@
 {{ template "header" }}
     {{ template "navbar" . }}
     <form class="w-screen" action="/projects" method="get">
-        <div class="flex">
-            <div class="inline-block mt-32 ml-auto">
-                <h3 class="text-lg text-gray-100">Filters</h3>
+        <div class="grid grid-cols-4">
+            <div class="mt-32 mr-2 ml-auto">
+                <h3 class="ml-1 text-lg text-gray-100">Filters</h3>
                 <hr>
-                <div class="my-2 space-y-2">
+                <div class="my-2 ml-1 space-y-2">
                     <label class="block relative pl-8 cursor-pointer checkmark-red">Personal Projects
                         <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Personal" {{ checked "Personal" .Types }}>
-                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-red outline-2 hover:bg-gray-900 checkmark"></span>
+                        <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-red outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
                     <label class="block relative pl-8 cursor-pointer checkmark-yellow">Hackathon Projects
                         <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Hackathon" {{ checked "Hackathon" .Types }}>
-                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-yellow outline-2 hover:bg-gray-900 checkmark"></span>
+                        <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-yellow outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
                     <label class="block relative pl-8 cursor-pointer checkmark-green">Professional Projects
                         <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Professional" {{ checked "Professional" .Types }}>
-                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-green outline-2 hover:bg-gray-900 checkmark"></span>
+                        <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-green outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
                     <label class="block relative pl-8 cursor-pointer checkmark-blue">Academic Projects
                         <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Academic" {{ checked "Academic" .Types }}>
-                        <span class="absolute top-0 left-0 w-5 h-5 bg-gray-700 rounded-full outline outline-blue outline-2 hover:bg-gray-900 checkmark"></span>
+                        <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-blue outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
                 </div>
                 <hr>
-                <label class="block relative pl-4 cursor-pointer" for="languages">Programming Languages
+                <label class="block relative pl-4 ml-1 cursor-pointer" for="languages">Programming Languages
                     <input class="absolute w-0 h-0 opacity-0 cursor-pointer languages-menu-toggle" type="checkbox" id="languages" {{ expanded .Languages }}>
                     <span class="absolute top-0 left-0 text-sm languages-menu-up">▼</span>
                     <span class="absolute top-0 left-0 text-sm languages-menu-down">▲</span>
@@ -42,7 +42,7 @@
                         </ul>
                     </div>
                 </label>
-                <label class="block relative pl-4 cursor-pointer" for="technologies">Technologies
+                <label class="block relative pl-4 ml-1 cursor-pointer" for="technologies">Technologies
                     <input class="absolute w-0 h-0 opacity-0 cursor-pointer technologies-menu-toggle" type="checkbox" id="technologies" {{ expanded .Technologies }}>
                     <span class="absolute top-0 left-0 text-sm technologies-menu-up">▼</span>
                     <span class="absolute top-0 left-0 text-sm technologies-menu-down">▲</span>
@@ -60,9 +60,9 @@
                         </ul>
                     </div>
                 </label>
-                <input class="px-2 my-4 text-gray-100 rounded-2xl outline outline-gray-100 outline-2 hover:bg-gray-100 hover:text-gray-700" type="submit" value="Apply">
+                <input class="px-2 my-4 ml-1 text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700" type="submit" value="Apply">
             </div>
-            <div class="w-[650] inline-block mx-12">
+            <div class="w-[650] col-span-2 flex items-center justify-center flex-col">
                 <input name="search" value="{{ .Search }}" class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
                 <div class="flex justify-between items-center mt-4 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
 
@@ -128,7 +128,7 @@
                     </a>
                 </div>
             </div>
-            <div class="inline-block mr-auto"></div>
+            <div class=""></div>
         </div>
     </form>
 {{ template "footer" }}

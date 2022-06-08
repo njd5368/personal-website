@@ -953,12 +953,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   position: relative;
 }
 
-.top-0 {
-  top: 0px;
-}
-
 .left-0 {
   left: 0px;
+}
+
+.top-\[2px\] {
+  top: 2px;
+}
+
+.top-0 {
+  top: 0px;
 }
 
 .top-\[6px\] {
@@ -1009,10 +1013,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-row-start: 3;
 }
 
-.float-right {
-  float: right;
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1031,11 +1031,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-}
-
-.mx-12 {
-  margin-left: 3rem;
-  margin-right: 3rem;
 }
 
 .my-6 {
@@ -1067,16 +1062,24 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: 8rem;
 }
 
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.ml-auto {
+  margin-left: auto;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
 .mb-4 {
   margin-bottom: 1rem;
-}
-
-.mr-auto {
-  margin-right: auto;
 }
 
 .ml-26 {
@@ -1225,6 +1228,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .grid-cols-6 {
   grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .grid-rows-5 {
@@ -1550,6 +1557,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .outline-2 {
   outline-width: 2px;
+}
+
+.outline-1 {
+  outline-width: 1px;
 }
 
 .outline-red {

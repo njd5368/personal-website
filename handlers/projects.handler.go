@@ -17,6 +17,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
+	"golang.org/x/exp/slices"
 )
 
 type ProjectsData struct {
@@ -213,6 +214,13 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 		File: body.File,
 	}
 
+	types := []string{"Personal", "Hackathon", "Professional", "Academic"}
+	if !slices.Contains(types, p.Type) {
+		log.Print("Project type incorrect.")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	project, err := d.CreateProject(p, body.Image)
 	if err != nil {
 		log.Print(err)
@@ -223,8 +231,4 @@ func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLi
 	w.WriteHeader(http.StatusAccepted)
 	log.Print("New post submitted: " + project.Name)
 	return
-}
-
-func getHTMLRenderer() {
-
 }
