@@ -2,9 +2,12 @@ package database
 
 import (
 	"database/sql"
+	"encoding/hex"
 	"errors"
 	"strconv"
 	"strings"
+
+	"golang.org/x/crypto/sha3"
 )
 
 type Database interface {
@@ -26,6 +29,12 @@ func (d *SQLiteDatabase) StartDatabase() error {
 	queries := []string{
 		`
 		PRAGMA foreign_keys = ON;
+		`,
+		`
+		CREATE TABLE IF NOT EXISTS User(
+			Username TEXT PRIMARY KEY UNIQUE,
+			Password TEXT NOT NULL
+		);
 		`,
 		`
 		CREATE TABLE IF NOT EXISTS Image(
@@ -85,6 +94,47 @@ func (d *SQLiteDatabase) StartDatabase() error {
 	}
 
 	return nil
+}
+
+func (d *SQLiteDatabase) CreateUser(username string, password string) error {
+	hash := sha3.New256()
+	hash.Write([]byte(password))
+	password = hex.EncodeToString(hash.Sum(nil))
+
+	_, err := d.db.Exec("INSERT INTO User(Username, Password) VALUES(?, ?)", username, password)
+
+ 	return err
+}
+
+func (d *SQLiteDatabase) UserExists() bool {
+	r := d.db.QueryRow(`SELECT EXISTS(SELECT 1 FROM User);`)
+	if r.Err() == sql.ErrNoRows {
+		return false
+	}
+	var exists int
+	err := r.Scan(&exists)
+	if err != nil {
+		return false
+	}
+
+	return exists == 1
+}
+
+func (d *SQLiteDatabase) IsUser(username string, password string) bool {
+	r := d.db.QueryRow(`SELECT Password FROM User WHERE Username = '` + username + `'`)
+	if r.Err() == sql.ErrNoRows {
+		return false
+	}
+
+	var p string
+	if err := r.Scan(&p); err != nil {
+		return false
+	}
+
+	hash := sha3.New256()
+	hash.Write([]byte(password))
+	password = hex.EncodeToString(hash.Sum(nil))
+	return password == p
 }
 
 func (d *SQLiteDatabase) CreateImage(i []byte) (int64, error) {

@@ -3,27 +3,16 @@
 @tailwind utilities;
 
 @layer utilities {
-  .scrollbar::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .scrollbar::-webkit-scrollbar-track {
-    border-radius: 100vh;
-    background: #1E1E2E;
-    outline-style: solid;
-    outline-width: 1px;
-    outline-color: #E8E9EA;
-  }
-
-  .scrollbar::-webkit-scrollbar-thumb {
-    background: #E8E9EA;
-    border-radius: 100vh;
-    border: 1px solid #E8E9EA;
-  }
-
   .line-clamp-3 {
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+  }
+
+  .line-clamp-4 {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;  
     overflow: hidden;
   }
@@ -46,6 +35,22 @@
 
   .checkmark-gray-100 input:checked ~ .checkmark {
     background-color: #D9E0EE;
+  }
+
+  .nav-menu-toggle:checked ~ .nav-menu-content {
+    max-height: 100%;
+  }
+  .nav-menu-up {
+    display: inline;
+  }
+  .nav-menu-toggle:checked ~ .nav-menu-up {
+    display: none;
+  }
+  .nav-menu-down {
+    display: none;
+  }
+  .nav-menu-toggle:checked ~ .nav-menu-down {
+    display: inline;
   }
 
   .languages-menu-toggle:checked ~ .languages-menu-content {

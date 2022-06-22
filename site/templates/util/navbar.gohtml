@@ -1,10 +1,10 @@
 {{ define "navbar" }}
-<nav class="top-0 w-screen h-16 bg-gray-900 shadow-md">
-    <div class="container flex justify-between items-center mx-auto">
-        <a class="flex items-center ml-10" href="/">
+<nav class="top-0 z-10 w-screen h-16 bg-gray-900 shadow-md">
+    <div class="container flex justify-between items-center md:mx-auto">
+        <a class="flex z-10 items-center ml-2 lg:ml-10" href="/">
             <img class="block w-16 h-16" src="/site/images/nd-logo-alpha.png" alt="ND" />
         </a>
-        <div class="flex items-center mr-4 space-x-4 w-auto">
+        <div class="hidden items-center mr-4 space-x-4 w-auto md:flex">
             {{ if eq "/" .Page }}
             <a href="/" class="inline-block text-xl text-center text-red">Home</a>
             {{ else }}
@@ -28,6 +28,55 @@
             {{ else }}
             <a href="/blog" class="inline-block text-xl text-center text-gray-100 hover:text-blue">Blog</a>
             {{ end }}
+        </div>
+
+        <div class="block absolute left-0 top-3 z-0 md:hidden">
+            <input class="absolute right-4 w-10 h-10 opacity-0 cursor-pointer nav-menu-toggle" type="checkbox" id="nav">
+            <span class="text-sm nav-menu-up">
+                <svg class="mr-4 ml-auto w-10 h-10 text-gray-100 fill-current" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="m0 96c0-17.67 14.33-32 32-32h384c17.7 0 32 14.33 32 32 0 17.7-14.3 32-32 32h-384c-17.67 0-32-14.3-32-32zm0 160c0-17.7 14.33-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32h-384c-17.67 0-32-14.3-32-32zm416 192h-384c-17.67 0-32-14.3-32-32s14.33-32 32-32h384c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
+                </svg>
+            </span>
+            <span class="text-sm nav-menu-down">
+                <svg class="mr-4 ml-auto w-10 h-10 text-gray-100 fill-current" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/>
+                </svg>
+            </span>
+            <div class="overflow-hidden w-screen max-h-0 bg-gray-900 rounded-b-2xl nav-menu-content">
+                <ul class="my-10 space-y-10">
+                    <li class="text-center">
+                        {{ if eq "/" .Page }}
+                        <a href="/" class="inline-block text-4xl text-center text-red">Home</a>
+                        {{ else }}
+                        <a href="/" class="inline-block text-4xl text-center text-gray-100 hover:text-red">Home</a>
+                        {{ end }}
+                    </li>
+                    
+                    <li class="text-center">
+                        {{ if eq "/about" .Page }}
+                        <a href="/about" class="inline-block text-4xl text-center text-yellow">About</a>
+                        {{ else }}
+                        <a href="/about" class="inline-block text-4xl text-center text-gray-100 hover:text-yellow">About</a>
+                        {{ end }}
+                    </li>
+                    
+                    <li class="text-center">
+                        {{ if eq "/projects" .Page }}
+                        <a href="/projects" class="inline-block text-4xl text-center text-green">Projects</a>
+                        {{ else }}
+                        <a href="/projects" class="inline-block text-4xl text-center text-gray-100 hover:text-green">Projects</a>
+                        {{ end }}
+                    </li>
+                    
+                    <li class="text-center">
+                        {{ if eq "/blog" .Page }}
+                        <a href="/blog" class="inline-block text-4xl text-center text-blue">Blog</a>
+                        {{ else }}
+                        <a href="/blog" class="inline-block text-4xl text-center text-gray-100 hover:text-blue">Blog</a>
+                        {{ end }}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </nav>

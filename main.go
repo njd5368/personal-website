@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"database/sql"
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
@@ -9,16 +11,20 @@ import (
 	"nicholas-deary/database"
 	"nicholas-deary/handlers"
 	"nicholas-deary/middleware"
+	"os"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"golang.org/x/exp/slices"
+	"golang.org/x/term"
 )
 
 const databaseFile = "blog.db"
+
 var t *template.Template
 var c *config.Config
 
@@ -30,7 +36,7 @@ func init() {
 	}
 
 	t = template.New("").Funcs(template.FuncMap{
-        "imageFromID": func(i int64) string {
+		"imageFromID": func(i int64) string {
 			return c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/image/" + strconv.FormatInt(i, 10)
 		},
 		"fmtDate": func(d string) string {
@@ -42,10 +48,10 @@ func init() {
 		},
 		"projectColor": func(p string) string {
 			colors := map[string]string{
-				"personal": "#F28FAD",
-				"hackathon": "#F8BD96",
+				"personal":     "#F28FAD",
+				"hackathon":    "#F8BD96",
 				"professional": "#ABE9B3",
-				"academic": "#96CDFB",
+				"academic":     "#96CDFB",
 			}
 			return colors[strings.ToLower(p)]
 		},
@@ -59,18 +65,18 @@ func init() {
 					result = append(result, strconv.Itoa(i))
 				}
 			} else if c < 7 {
-				for i := 1; i <= 9; i ++ {
+				for i := 1; i <= 9; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 				result = append(result, "...", strconv.Itoa(t))
-			} else if t - c < 6 {
+			} else if t-c < 6 {
 				result = append(result, "1", "...")
 				for i := t - 8; i <= t; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 			} else {
 				result = append(result, "1", "...")
-				for i := c - 3; i <= c + 3; i++ {
+				for i := c - 3; i <= c+3; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 				result = append(result, "...", strconv.Itoa(t))
@@ -92,7 +98,10 @@ func init() {
 			}
 			return "checked"
 		},
-    })
+		"noProjects": func(p []database.Project) bool {
+			return len(p) == 0
+		},
+	})
 	t = template.Must(t.ParseGlob("site/templates/util/*"))
 	t = template.Must(t.ParseGlob("site/templates/pages/*"))
 	t = template.Must(t.ParseGlob("site/templates/error-pages/*"))
@@ -100,6 +109,30 @@ func init() {
 
 func faviconHandler(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "site/images/favicon.ico")
+}
+
+func checkUser(d *database.SQLiteDatabase) error {
+	if !d.UserExists() {
+		fmt.Print("Enter a username for the API user: ")
+		reader := bufio.NewReader(os.Stdin)
+		username, err := reader.ReadString('\n')
+		username = strings.TrimSpace(username)
+		if err != nil {
+			return err
+		}
+
+		fmt.Print("Enter a password for the API user: ")
+		passwordBytes, err := term.ReadPassword(int(syscall.Stdin))
+		if err != nil {
+			return err
+		}
+		fmt.Println()
+
+		err = d.CreateUser(username, string(passwordBytes))
+		return err
+	}
+
+	return nil
 }
 
 func main() {
@@ -111,6 +144,11 @@ func main() {
 
 	d := database.NewSQLiteDatabase(db)
 	err = d.StartDatabase()
+	if err != nil {
+		log.Panic(err)
+	}
+
+	err = checkUser(d)
 	if err != nil {
 		log.Panic(err)
 	}
@@ -154,17 +192,17 @@ func main() {
 	a.HandleFunc("/api/projects", func(w http.ResponseWriter, r *http.Request) {
 		handlers.PostProjectHandler(w, r, d)
 	}).Methods("POST")
-	a.HandleFunc("/api/image", func (w http.ResponseWriter, r *http.Request)  {
+	a.HandleFunc("/api/image", func(w http.ResponseWriter, r *http.Request) {
 		handlers.PostImageHandler(w, r, d, c)
 	}).Methods("POST")
 
-	a.Use(middleware.APIAuthorization{Config: c}.CheckUserAuthorziation)
+	a.Use(middleware.APIAuthorization{Config: c, Database: d}.CheckUserAuthorziation)
 
 	if len(c.CertFile) == 0 || len(c.KeyFile) == 0 {
 		log.Println("Starting insecure server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
 		log.Fatal(http.ListenAndServe(c.Host+":"+strconv.Itoa(c.Port), r))
 	} else {
 		log.Println("Starting secure server " + c.Host + " on port " + strconv.Itoa(c.Port) + "....")
-		log.Fatal(http.ListenAndServeTLS(c.Host+":"+strconv.Itoa(c.Port), c.CertFile, c.KeyFile, r))	
+		log.Fatal(http.ListenAndServeTLS(c.Host+":"+strconv.Itoa(c.Port), c.CertFile, c.KeyFile, r))
 	}
 }

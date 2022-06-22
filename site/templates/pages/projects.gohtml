@@ -1,7 +1,7 @@
 {{ template "header" }}
     {{ template "navbar" . }}
-    <form class="w-screen" action="/projects" method="get">
-        <div class="grid grid-cols-4">
+    <form class="z-0 w-screen" action="/projects" method="get">
+        <div class="xl:grid xl:grid-cols-4">
             <div class="mt-32 mr-2 ml-auto">
                 <h3 class="ml-1 text-lg text-gray-100">Filters</h3>
                 <hr>
@@ -62,9 +62,13 @@
                 </label>
                 <input class="px-2 my-4 ml-1 text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700" type="submit" value="Apply">
             </div>
-            <div class="w-[650] col-span-2 flex items-center justify-center flex-col">
-                <input name="search" value="{{ .Search }}" class="mx-auto my-6 px-3 h-10 w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
-                <div class="flex justify-between items-center mt-4 h-[50px] w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
+            <div class="md:w-[650] xl:col-span-2 flex items-center flex-col">
+                <input name="search" value="{{ .Search }}" class="mx-auto my-6 px-3 h-10 w-11/12 md:w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
+                {{ if noProjects .Projects }}
+                <h2 class="my-6 text-5xl">No Matching Projects, Sorry</h2>
+                <p>Try adjusting the filters or title search.</p>
+                {{ else }}
+                <div class="flex justify-between items-center mt-4 h-[50px] w-11/12 md:w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
 
                     <a href="{{.LastPage}}">
                         <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
@@ -88,25 +92,25 @@
                         </div>
                     </a>
                 </div>
-                <div class="mx-auto my-4 space-y-4"> 
+                <div class="mx-auto my-4 space-y-4 w-11/12 md:w-auto"> 
                 {{ range .Projects}}
                 <div>
                     <a href="/projects/{{.Name}}">
-                        <div class="h-[250px] w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ projectColor .Type }}">
-                            <img src={{ imageFromID .Image }} alt="Hero Image" class="h-[125px] w-[650px] rounded-t-2xl object-cover object-center"/>
-                            <div class="container flex justify-between h-12 w-[650] items-center">
-                                <h1 class="overflow-hidden pl-3 text-xl whitespace-nowrap text-ellipsis" style="color: {{ projectColor .Type }}">{{.Name}}</h1>
-                                <p class="pr-3 whitespace-nowrap">{{ fmtDate .Date }}</p>
+                        <div class="h-80 w-full md:h-[250px] md:w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ projectColor .Type }}">
+                            <img src={{ imageFromID .Image }} alt="Hero Image" class="object-cover object-center w-full h-1/2 rounded-t-2xl"/>
+                            <div class="w-full h-12 md:container md:flex md:justify-between md:items-center">
+                                <h1 class="overflow-hidden px-3 text-xl whitespace-nowrap text-ellipsis" style="color: {{ projectColor .Type }}">{{.Name}}</h1>
+                                <p class="px-3 text-xs whitespace-nowrap md:text-base md:pl-0">{{ fmtDate .Date }}</p>
                             </div>
-                            <div class="h-[69px] w-[650px] px-3">
-                                <p class="line-clamp-3">{{.Description}}</p>
+                            <div class="h-26 w-full md:h-[69px] px-3">
+                                <p class="line-clamp-4 md:line-clamp-3">{{.Description}}</p>
                             </div>
                         </div>
                     </a>
                 </div>
                 {{ end }}  
                 </div>
-                <div class="flex justify-between items-center mb-4 h-[50px] w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
+                <div class="flex justify-between items-center mb-4 h-[50px] w-11/12 md:w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
                     <a href="{{.LastPage}}">
                         <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
                             <span class="inline-block">❮</span>
@@ -127,8 +131,8 @@
                         </div>
                     </a>
                 </div>
+                {{ end }}
             </div>
-            <div class=""></div>
         </div>
     </form>
 {{ template "footer" }}
