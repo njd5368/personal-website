@@ -53,6 +53,36 @@
     display: inline;
   }
 
+  .filter-toggle:checked {
+    position: fixed;
+    right: calc(8.3333333% + 4px);
+    top: calc(8.3333333% + 4px);
+    width: 2.5rem;
+  }
+
+  .filter-toggle:checked ~ .filter-close {
+    display: inline;
+    position: fixed;
+    right: calc(8.3333333% + 4px);
+    top: calc(8.3333333% + 4px);
+  }
+
+  .filter-menu {
+    display: none;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .filter-menu::-webkit-scrollbar {
+    display: none;
+  }
+  .filter-toggle:checked ~ .filter-menu {
+    display: inline;
+  }
+
+  .right-align-650 {
+    right: calc(50% - 325px);
+  }
+
   .languages-menu-toggle:checked ~ .languages-menu-content {
     max-height: 100%;
   }

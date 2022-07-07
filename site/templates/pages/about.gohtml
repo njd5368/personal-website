@@ -1,9 +1,24 @@
 {{ template "header" }}
 {{ template "navbar" . }}
-<div class="container flex justify-between mx-auto my-12">
-  <div class="pr-4 space-y-4 w-1/2 h-auto pl-26">
-    <h1 class="mx-auto text-2xl text-yellow">About Me</h1>
+<div class="mx-auto my-12 xl:justify-between xl:flex xl:container">
+  <div class="mx-4 space-y-4 h-auto prose xl:pr-4 xl:w-1/2 xl:pl-26">
+    <div class="flex flex-row items-center">
+      <img
+        class="object-cover m-0 mr-4 h-20 rounded-full xl:hidden"
+        src="/site/images/temp-square.jpg"
+        alt="photo"
+      />
+      <h1 class="m-0 text-4xl xl:text-2xl text-yellow">
+        About Me
+      </h1>
+    </div>
+    
     <p class="text-gray-100">
+      <img
+        class="float-right m-2 h-44 rounded-xl xl:hidden"
+        src="/site/images/temp-golden-y.jpg"
+        alt="photo"
+      />
       Hi, my name is Nicholas Deary! I'm a software developer starting my
       journey in computing. Currently, I'm enrolled at the Rochester Institute
       of Technology working on a bachelor's in Computer Science and a minor in
@@ -13,6 +28,11 @@
       languages. I also know web technologies (HTML/CSS/JS), SQL, and several
       API's.
     </p>
+    <img
+        class="mx-auto w-full rounded-xl max-w-[240px] xl:hidden"
+        src="/site/images/temp-golden-x.jpg"
+        alt="photo"
+      />
     <p class="text-gray-100">
       While working at MathWorks, I developed internal tools. These tools were
       automation scripts and dashboards for system administrators. At Rochester
@@ -22,13 +42,18 @@
       review the material with the students.
     </p>
     <p class="text-gray-100">
+      <img
+        class="float-left object-cover m-2 h-24 rounded-xl xl:hidden"
+        src="/site/images/temp-square.jpg"
+        alt="photo"
+      />
       Garuda (Linux based) is my favorite operating system, and I regularly
       attend meetings for the Linux Users Group at RIT. I also participate in
       Juggling Club. In my free time, I enjoy outdoor activities such as hiking
       and rock climbing.
     </p>
   </div>
-  <div class="grid grid-cols-6 grid-rows-5 gap-12 pr-4 mt-12 w-1/2">
+  <div class="hidden grid-cols-6 grid-rows-5 gap-12 pr-4 mt-12 w-1/2 xl:grid">
     <div class="col-span-2 col-start-1 row-span-2 row-start-1">
       <img
         class="object-cover rounded-full"

@@ -945,12 +945,32 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-prose-invert-td-borders: #D9E0EE;
 }
 
+.fixed {
+  position: fixed;
+}
+
 .absolute {
   position: absolute;
 }
 
 .relative {
   position: relative;
+}
+
+.right-\[4\.1666667\%\] {
+  right: 4.1666667%;
+}
+
+.top-36 {
+  top: 9rem;
+}
+
+.left-\[8\.3333333\%\] {
+  left: 8.3333333%;
+}
+
+.top-\[8\.3333333\%\] {
+  top: 8.3333333%;
 }
 
 .left-0 {
@@ -979,6 +999,22 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .z-0 {
   z-index: 0;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+.z-20 {
+  z-index: 20;
+}
+
+.z-40 {
+  z-index: 40;
+}
+
+.z-30 {
+  z-index: 30;
 }
 
 .z-10 {
@@ -1029,6 +1065,22 @@ Ensure the default browser behavior of the `hidden` attribute.
   grid-row-start: 3;
 }
 
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.m-0 {
+  margin: 0px;
+}
+
+.m-2 {
+  margin: 0.5rem;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -1037,6 +1089,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 .my-12 {
   margin-top: 3rem;
   margin-bottom: 3rem;
+}
+
+.mx-4 {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }
 
 .my-auto {
@@ -1064,6 +1121,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 2.5rem;
 }
 
+.mr-4 {
+  margin-right: 1rem;
+}
+
 .mt-12 {
   margin-top: 3rem;
 }
@@ -1076,20 +1137,16 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-right: 1.75rem;
 }
 
-.mt-32 {
-  margin-top: 8rem;
-}
-
-.mr-2 {
-  margin-right: 0.5rem;
-}
-
-.ml-auto {
-  margin-left: auto;
-}
-
 .ml-1 {
   margin-left: 0.25rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
+}
+
+.mb-16 {
+  margin-bottom: 4rem;
 }
 
 .mt-4 {
@@ -1108,12 +1165,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-left: 1rem;
 }
 
-.mr-4 {
-  margin-right: 1rem;
-}
-
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .block {
@@ -1128,10 +1185,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   display: flex;
 }
 
-.grid {
-  display: grid;
-}
-
 .hidden {
   display: none;
 }
@@ -1140,8 +1193,28 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: auto;
 }
 
+.h-20 {
+  height: 5rem;
+}
+
+.h-44 {
+  height: 11rem;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
 .h-full {
   height: 100%;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-5\/6 {
+  height: 83.333333%;
 }
 
 .h-0 {
@@ -1154,10 +1227,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .h-3 {
   height: 0.75rem;
-}
-
-.h-10 {
-  height: 2.5rem;
 }
 
 .h-\[50px\] {
@@ -1192,6 +1261,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   min-height: 100vh;
 }
 
+.w-full {
+  width: 100%;
+}
+
 .w-1\/2 {
   width: 50%;
 }
@@ -1206,6 +1279,18 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-\[91\.666667\%\] {
   width: 91.666667%;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.w-10 {
+  width: 2.5rem;
+}
+
+.w-5\/6 {
+  width: 83.333333%;
 }
 
 .w-0 {
@@ -1228,10 +1313,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 50px;
 }
 
-.w-full {
-  width: 100%;
-}
-
 .w-auto {
   width: auto;
 }
@@ -1240,12 +1321,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   width: 3rem;
 }
 
-.w-16 {
-  width: 4rem;
-}
-
-.w-10 {
-  width: 2.5rem;
+.max-w-\[240px\] {
+  max-width: 240px;
 }
 
 .max-w-\[550px\] {
@@ -1344,6 +1421,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   overflow: hidden;
 }
 
+.overflow-y-scroll {
+  overflow-y: scroll;
+}
+
 .text-ellipsis {
   text-overflow: ellipsis;
 }
@@ -1360,12 +1441,12 @@ Ensure the default browser behavior of the `hidden` attribute.
   border-radius: 0.75rem;
 }
 
-.rounded-sm {
-  border-radius: 0.125rem;
-}
-
 .rounded-2xl {
   border-radius: 1rem;
+}
+
+.rounded-sm {
+  border-radius: 0.125rem;
 }
 
 .rounded-t-2xl {
@@ -1430,6 +1511,10 @@ Ensure the default browser behavior of the `hidden` attribute.
      object-position: center;
 }
 
+.p-4 {
+  padding: 1rem;
+}
+
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -1447,10 +1532,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .pr-4 {
   padding-right: 1rem;
-}
-
-.pl-26 {
-  padding-left: 6.5rem;
 }
 
 .pt-8 {
@@ -1498,9 +1579,9 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 2.25rem;
 }
 
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
+.text-4xl {
+  font-size: 2.25rem;
+  line-height: 2.5rem;
 }
 
 .text-xl {
@@ -1508,14 +1589,14 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 1.75rem;
 }
 
-.text-lg {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-}
-
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
 }
 
 .text-5xl {
@@ -1528,11 +1609,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   line-height: 1rem;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
 .font-bold {
   font-weight: 700;
 }
@@ -1543,6 +1619,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .font-extrabold {
   font-weight: 800;
+}
+
+.leading-10 {
+  line-height: 2.5rem;
 }
 
 .text-yellow {
@@ -1622,6 +1702,11 @@ Ensure the default browser behavior of the `hidden` attribute.
   outline-color: #D9E0EE;
 }
 
+.drop-shadow-2xl {
+  --tw-drop-shadow: drop-shadow(0 25px 25px rgb(0 0 0 / 0.15));
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
 .line-clamp-4 {
   display: -webkit-box;
   -webkit-line-clamp: 4;
@@ -1666,6 +1751,34 @@ Ensure the default browser behavior of the `hidden` attribute.
 }
 
 .nav-menu-toggle:checked ~ .nav-menu-down {
+  display: inline;
+}
+
+.filter-toggle:checked {
+  position: fixed;
+  right: calc(8.3333333% + 4px);
+  top: calc(8.3333333% + 4px);
+  width: 2.5rem;
+}
+
+.filter-toggle:checked ~ .filter-close {
+  display: inline;
+  position: fixed;
+  right: calc(8.3333333% + 4px);
+  top: calc(8.3333333% + 4px);
+}
+
+.filter-menu {
+  display: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.filter-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-toggle:checked ~ .filter-menu {
   display: inline;
 }
 
@@ -1811,14 +1924,14 @@ code.hljs {
   font-weight: 700;
 }
 
-.hover\:bg-gray-900:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(22 19 32 / var(--tw-bg-opacity));
-}
-
 .hover\:bg-gray-100:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(217 224 238 / var(--tw-bg-opacity));
+}
+
+.hover\:bg-gray-900:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 19 32 / var(--tw-bg-opacity));
 }
 
 .hover\:text-lg:hover {
@@ -1829,6 +1942,11 @@ code.hljs {
 .hover\:text-blue:hover {
   --tw-text-opacity: 1;
   color: rgb(150 205 251 / var(--tw-text-opacity));
+}
+
+.hover\:text-gray-800:hover {
+  --tw-text-opacity: 1;
+  color: rgb(26 24 38 / var(--tw-text-opacity));
 }
 
 .hover\:text-gray-700:hover {
@@ -1951,6 +2069,10 @@ code.hljs {
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  .md\:right-align-650 {
+    right: calc(50% - 325px);
+  }
 }
 
 @media (min-width: 1024px) {
@@ -1964,16 +2086,129 @@ code.hljs {
 }
 
 @media (min-width: 1280px) {
+  .xl\:container {
+    width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .xl\:container {
+      max-width: 640px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .xl\:container {
+      max-width: 768px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .xl\:container {
+      max-width: 1024px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .xl\:container {
+      max-width: 1280px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .xl\:container {
+      max-width: 1536px;
+    }
+  }
+
+  .xl\:static {
+    position: static;
+  }
+
   .xl\:col-span-2 {
     grid-column: span 2 / span 2;
+  }
+
+  .xl\:my-6 {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .xl\:mr-2 {
+    margin-right: 0.5rem;
+  }
+
+  .xl\:ml-auto {
+    margin-left: auto;
+  }
+
+  .xl\:mt-32 {
+    margin-top: 8rem;
+  }
+
+  .xl\:block {
+    display: block;
+  }
+
+  .xl\:flex {
+    display: flex;
   }
 
   .xl\:grid {
     display: grid;
   }
 
+  .xl\:hidden {
+    display: none;
+  }
+
+  .xl\:h-auto {
+    height: auto;
+  }
+
+  .xl\:w-1\/2 {
+    width: 50%;
+  }
+
+  .xl\:w-auto {
+    width: auto;
+  }
+
   .xl\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .xl\:justify-between {
+    justify-content: space-between;
+  }
+
+  .xl\:overflow-visible {
+    overflow: visible;
+  }
+
+  .xl\:bg-transparent {
+    background-color: transparent;
+  }
+
+  .xl\:p-0 {
+    padding: 0px;
+  }
+
+  .xl\:pr-4 {
+    padding-right: 1rem;
+  }
+
+  .xl\:pl-26 {
+    padding-left: 6.5rem;
+  }
+
+  .xl\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
+  .xl\:drop-shadow-none {
+    --tw-drop-shadow: drop-shadow(0 0 #0000);
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
   }
 }
   
