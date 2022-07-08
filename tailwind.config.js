@@ -34,6 +34,16 @@ module.exports = {
       'blue':     '#96CDFB',
       'sky':      '#89DCEB',
     },
+    screens: {
+      'sm-y': {'raw': '(min-height: 390px)'},
+      'md-y': {'raw': '(min-height: 778px)'},
+      'xs': '382px',
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      '2xl': '1536px',
+    },
     extend: {
       spacing: {
         '26': '6.5rem',

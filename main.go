@@ -55,28 +55,28 @@ func init() {
 			}
 			return colors[strings.ToLower(p)]
 		},
-		"getPageNumbers": func(c int, t int) []string {
+		"getPageNumbers": func(c int, t int, w int) []string {
 			if c < 1 || t < 1 {
 				return []string{}
 			}
 			result := []string{}
-			if t < 12 {
+			if t <= w {
 				for i := 1; i <= t; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
-			} else if c < 7 {
-				for i := 1; i <= 9; i++ {
+			} else if c <= w / 2 + 1 {
+				for i := 1; i <= w - 2; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 				result = append(result, "...", strconv.Itoa(t))
-			} else if t-c < 6 {
+			} else if t-c < w / 2 + 1 {
 				result = append(result, "1", "...")
-				for i := t - 8; i <= t; i++ {
+				for i := t - (w - 3); i <= t; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 			} else {
 				result = append(result, "1", "...")
-				for i := c - 3; i <= c+3; i++ {
+				for i := c - ((w - 5) / 2); i <= c + ((w - 5) / 2); i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 				result = append(result, "...", strconv.Itoa(t))

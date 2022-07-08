@@ -56,15 +56,36 @@
   .filter-toggle:checked {
     position: fixed;
     right: calc(8.3333333% + 4px);
-    top: calc(8.3333333% + 4px);
+    top: calc(4rem + 4px);
     width: 2.5rem;
   }
+  .filter-toggle:hover ~ .filter-button {
+    --tw-bg-opacity: 1;
+    background-color: rgb(217 224 238 / var(--tw-bg-opacity));
 
+    --tw-text-opacity: 1;
+    color: rgb(26 24 38 / var(--tw-text-opacity));
+  }
+  .filter-toggle:checked ~ .filter-button {
+    --tw-bg-opacity: 1;
+    background-color: rgb(26 24 38 / var(--tw-bg-opacity));
+
+    --tw-text-opacity: 1;
+    color: rgb(217 224 238 / var(--tw-text-opacity));
+  }
   .filter-toggle:checked ~ .filter-close {
     display: inline;
     position: fixed;
     right: calc(8.3333333% + 4px);
-    top: calc(8.3333333% + 4px);
+    top: calc(4rem + 4px);
+  }
+  @media (min-height: 778px) {
+    .filter-toggle:checked ~ .filter-close {
+      top: calc(8.3333333% + 4px);
+    }
+    .filter-toggle:checked {
+      top: calc(8.3333333% + 4px);
+    }
   }
 
   .filter-menu {
@@ -77,6 +98,14 @@
   }
   .filter-toggle:checked ~ .filter-menu {
     display: inline;
+  }
+  @media (min-width: 1280px) {
+    .filter-toggle:checked ~ .filter-close {
+      display: none;
+    }
+    .filter-toggle:checked {
+      display: none;
+    }
   }
 
   .right-align-650 {
@@ -114,6 +143,8 @@
   .technologies-menu-toggle:checked ~ .technologies-menu-down {
     display: inline;
   }
+
+  
 }
 
 pre code.hljs {

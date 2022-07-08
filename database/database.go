@@ -55,6 +55,18 @@ func (d *SQLiteDatabase) StartDatabase() error {
 		);
 		`,
 		`
+		CREATE TABLE IF NOT EXISTS Post(
+			ID INTEGER PRIMARY KEY AUTOINCREMENT,
+			Name TEXT NOT NULL UNIQUE,
+			Description TEXT NOT NULL,
+			Date TEXT NOT NULL,
+			Type TEXT NOT NULL,
+			Image INTEGER NOT NULL,
+			File BLOB NOT NULL,
+			FOREIGN KEY(Image) REFERENCES Image(ID)
+		);
+		`,
+		`
 		CREATE TABLE IF NOT EXISTS Language(
 			ID INTEGER PRIMARY KEY AUTOINCREMENT,
 			Name TEXT NOT NULL UNIQUE
@@ -70,6 +82,15 @@ func (d *SQLiteDatabase) StartDatabase() error {
 		);
 		`,
 		`
+		CREATE TABLE IF NOT EXISTS PostLanguage(
+			Project INTEGER NOT NULL,
+			Language INTEGER NOT NULL,
+			PRIMARY KEY(Project, Language),
+			FOREIGN KEY(Project) REFERENCES Project(ID),
+			FOREIGN KEY(Language) REFERENCES Language(ID)
+		);
+		`,
+		`
 		CREATE TABLE IF NOT EXISTS Technology(
 			ID INTEGER PRIMARY KEY AUTOINCREMENT,
 			Name TEXT NOT NULL UNIQUE
@@ -77,6 +98,15 @@ func (d *SQLiteDatabase) StartDatabase() error {
 		`,
 		`
 		CREATE TABLE IF NOT EXISTS ProjectTechnology(
+			Project INTEGER NOT NULL,
+			Technology INTEGER NOT NULL,
+			PRIMARY KEY(Project, Technology),
+			FOREIGN KEY(Project) REFERENCES Project(ID),
+			FOREIGN KEY(Technology) REFERENCES Technology(ID)
+		);
+		`,
+		`
+		CREATE TABLE IF NOT EXISTS PostTechnology(
 			Project INTEGER NOT NULL,
 			Technology INTEGER NOT NULL,
 			PRIMARY KEY(Project, Technology),

@@ -4,7 +4,7 @@
         <div class="xl:grid xl:grid-cols-4">
             <input class="z-50 absolute w-16 h-10 opacity-0 cursor-pointer right-[4.1666667%] top-36 filter-toggle md:right-align-650" type="checkbox" id="nav">
 
-            <div class="z-20 absolute bg-gray-800 outline outline-2 rounded-2xl text-gray-100 text-center w-16 h-10 leading-10 cursor-pointer right-[4.1666667%] top-36 md:right-align-650 hover:bg-gray-100 hover:text-gray-800 xl:hidden">
+            <div class="z-20 absolute bg-gray-800 outline outline-2 rounded-2xl text-gray-100 text-center w-16 h-10 leading-10 cursor-pointer right-[4.1666667%] top-36 md:right-align-650 xl:hidden filter-button">
                 Filters
             </div>
 
@@ -14,7 +14,7 @@
                 </svg>
             </span>
             
-            <div class="fixed z-30 p-4 pt-8 w-5/6 h-5/6 bg-gray-800 rounded-2xl left-[8.3333333%] top-[8.3333333%] overflow-y-scroll xl:overflow-visible drop-shadow-2xl xl:drop-shadow-none xl:p-0 xl:w-auto xl:h-auto xl:bg-transparent xl:static xl:mr-2 xl:ml-auto xl:mt-32 xl:block filter-menu">
+            <div class="fixed z-30 p-4 pt-8 w-5/6 h-3/4 sm-y:h-5/6 bg-gray-800 rounded-2xl left-[8.3333333%] top-16 md-y:top-[8.3333333%] overflow-y-scroll xl:overflow-visible drop-shadow-2xl xl:drop-shadow-none xl:p-0 xl:w-auto xl:h-auto xl:bg-transparent xl:static xl:mr-2 xl:ml-auto xl:mt-32 xl:block filter-menu">
                 
                 <h3 class="ml-1 text-lg text-gray-100">Filters</h3>
                 <hr>
@@ -78,20 +78,30 @@
             <div class="md:w-[650] xl:col-span-2 flex items-center flex-col">
                 <input name="search" value="{{ .Search }}" class="mx-auto mt-6 mb-16 xl:my-6 px-3 h-10 w-11/12 md:w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
                 {{ if noProjects .Projects }}
-                <h2 class="my-6 text-5xl">No Matching Projects, Sorry</h2>
-                <p>Try adjusting the filters or title search.</p>
+                <h2 class="mx-2 my-6 text-5xl text-center">No Matching Projects, Sorry</h2>
+                <p class="mx-2 text-center">Try adjusting the filters or title search.</p>
                 {{ else }}
                 <div class="flex justify-between items-center mt-4 h-[50px] w-11/12 md:w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
 
                     <a href="{{.LastPage}}">
-                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                        <div class="flex items-center justify-center h-[50px] w-8 xs:w-[50px] hover:text-white hover:text-lg">
                             <span class="inline-block">❮</span>
                         </div>
                     </a>
-                    <div class="flex items-center h-[50px] max-w-[550px]">
-                        {{ $CP := intToString .CurrentPage }}
-                        {{ $PN := getPageNumbers .CurrentPage .TotalPages }}
-                        {{ range $PN }}
+                    {{ $CP := intToString .CurrentPage }}
+                    {{ $PN11 := getPageNumbers .CurrentPage .TotalPages 11 }}
+                    {{ $PN5 := getPageNumbers .CurrentPage .TotalPages 5 }}
+                    <div class="hidden md:flex items-center h-[50px] max-w-[550px]">
+                        {{ range $PN11 }}
+                            {{ if eq . $CP }}
+                                <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
+                            {{ else }}
+                                <span class="w-[50px] text-center">{{.}}</span>
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                    <div class="flex md:hidden items-center h-[50px]">
+                        {{ range $PN5 }}
                             {{ if eq . $CP }}
                                 <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
                             {{ else }}
@@ -100,7 +110,7 @@
                         {{ end }}
                     </div>
                     <a href="{{.NextPage}}">
-                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                        <div class="flex items-center justify-center h-[50px] w-8 xs:w-[50px] hover:text-white hover:text-lg">
                             <span class="inline-block">❯</span>
                         </div>
                     </a>
@@ -125,12 +135,21 @@
                 </div>
                 <div class="flex justify-between items-center mb-4 h-[50px] w-11/12 md:w-[650px] rounded-t-md rounded-b-2xl outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
                     <a href="{{.LastPage}}">
-                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                        <div class="flex items-center justify-center h-[50px] w-8 xs:w-[50px] hover:text-white hover:text-lg">
                             <span class="inline-block">❮</span>
                         </div>
                     </a>
-                    <div class="flex items-center h-[50px] max-w-[550px]">
-                        {{ range $PN }}
+                    <div class="hidden md:flex items-center h-[50px] max-w-[550px]">
+                        {{ range $PN11 }}
+                            {{ if eq . $CP }}
+                                <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
+                            {{ else }}
+                                <span class="w-[50px] text-center">{{.}}</span>
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                    <div class="flex md:hidden items-center h-[50px]">
+                        {{ range $PN5 }}
                             {{ if eq . $CP }}
                                 <span class="text-xl font-extrabold w-[50px] text-center text-white border-solid border-gray-100 border-2 rounded-2xl">{{.}}</span>
                             {{ else }}
@@ -139,7 +158,7 @@
                         {{ end }}
                     </div>
                     <a href="{{.NextPage}}">
-                        <div class="flex items-center justify-center h-[50px] w-[50px] hover:text-white hover:text-lg">
+                        <div class="flex items-center justify-center h-[50px] w-8 xs:w-[50px] hover:text-white hover:text-lg">
                             <span class="inline-block">❯</span>
                         </div>
                     </a>
