@@ -46,12 +46,19 @@ func init() {
 			}
 			return t.Format("Jan 02, 2006")
 		},
-		"projectColor": func(p string) string {
+		"postColor": func(p string) string {
 			colors := map[string]string{
 				"personal":     "#F28FAD",
+				"development":	"#F28FAD",
+
 				"hackathon":    "#F8BD96",
+				"linux":	    "#F8BD96",
+
 				"professional": "#ABE9B3",
+				"update":		"#ABE9B3",
+
 				"academic":     "#96CDFB",
+				"other":     	"#96CDFB",
 			}
 			return colors[strings.ToLower(p)]
 		},
@@ -98,7 +105,7 @@ func init() {
 			}
 			return "checked"
 		},
-		"noProjects": func(p []database.Project) bool {
+		"noPosts": func(p []database.Post) bool {
 			return len(p) == 0
 		},
 	})
@@ -172,13 +179,17 @@ func main() {
 		handlers.ProjectsHandler(w, r, t, d)
 	}).Methods("GET")
 	r.HandleFunc("/projects/{name}", func(w http.ResponseWriter, r *http.Request) {
-		handlers.ProjectHandler(w, r, c, t, d)
+		handlers.GetProjectPostHandler(w, r, c, t, d)
 	}).Methods("GET")
 	r.HandleFunc("/blog", func(w http.ResponseWriter, r *http.Request) {
-		handlers.BlogHandler(w, r, t)
+		handlers.BlogHandler(w, r, t, d)
 	}).Methods("GET")
 	r.HandleFunc("/blog/{name}", func(w http.ResponseWriter, r *http.Request) {
+		handlers.GetBlogPostHandler(w, r, c, t, d)
+	}).Methods("GET")
 
+	r.HandleFunc("/latest", func(w http.ResponseWriter, r *http.Request) {
+		handlers.LatestPostHandler(w, r, c, d)
 	}).Methods("GET")
 
 	r.HandleFunc("/image/{id}", func(w http.ResponseWriter, r *http.Request) {
@@ -189,8 +200,8 @@ func main() {
 		handlers.NotFoundHandler(w, r, t)
 	})
 
-	a.HandleFunc("/api/projects", func(w http.ResponseWriter, r *http.Request) {
-		handlers.PostProjectHandler(w, r, d)
+	a.HandleFunc("/api/post", func(w http.ResponseWriter, r *http.Request) {
+		handlers.PostPostHandler(w, r, d)
 	}).Methods("POST")
 	a.HandleFunc("/api/image", func(w http.ResponseWriter, r *http.Request) {
 		handlers.PostImageHandler(w, r, d, c)

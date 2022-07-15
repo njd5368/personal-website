@@ -1,9 +1,7 @@
 package handlers
 
 import (
-	"encoding/json"
 	"html/template"
-	"io/ioutil"
 	"log"
 	"math"
 	"net/http"
@@ -17,42 +15,49 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday/v2"
-	"golang.org/x/exp/slices"
 )
 
-type ProjectsData struct {
+type PostsData struct {
 	Page        	string
 	Search 			string
-	Types 			[]string
+	Categories 		[]string
 	Languages		[]string
 	AllLanguages 	[]string
 	Technologies	[]string
 	AllTechnologies []string
-	Projects    	[]database.Project
+	Posts    	[]database.Post
 	CurrentPage 	int
 	TotalPages  	int
 	LastPage		string
 	NextPage		string
 }
 
-type ProjectData struct {
+type PostData struct {
 	Page        string
-	Project     *database.Project
+	Post     *database.Post
 	ArticleHTML template.HTML
 }
 
 func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
+	ProjectsAndBlogHandler(w, r, t, d, database.Project)
+}
+
+func BlogHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase) {
+	ProjectsAndBlogHandler(w, r, t, d, database.Blog)
+}
+
+func ProjectsAndBlogHandler(w http.ResponseWriter, r *http.Request, t *template.Template, d *database.SQLiteDatabase, urlRoute database.Type) {
 	values := r.URL.Query()
 	page := 1
 	search := values.Get("search")
-	types := []string{}
+	categories := []string{}
 	languages := []string{}
 	technologies := []string{}
 	first := ""
 	last := ""
 
 	if values.Has("types") {
-		types = values["types"]
+		categories = values["types"]
 	}
 	if values.Has("languages") {
 		languages = values["languages"]
@@ -71,7 +76,13 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 		allTechnologies = []string{}
 	}
 
-	totalPages := int(math.Ceil(float64(d.GetProjectCount(search, types, languages, technologies)) / 10))
+	var totalPages int
+	if urlRoute == database.Project {
+		totalPages = int(math.Ceil(float64(d.GetProjectPostCount(search, categories, languages, technologies)) / 10))
+	} else {
+		totalPages = int(math.Ceil(float64(d.GetBlogPostCount(search, categories, languages, technologies)) / 10))
+	}
+	
 
 	if values.Has("page") {
 		tmpPage, err := strconv.Atoi(values.Get("page"))
@@ -93,7 +104,17 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 		last = values.Get("l")
 	}
 	
-	p, err := d.GetProjects(page, search, types, languages, technologies, first, last)
+	var p []database.Post
+	var navpage string
+	if urlRoute == database.Project {
+		p, err = d.GetProjectPosts(page, search, categories, languages, technologies, first, last)
+		navpage = "projects"
+
+	} else {
+		p, err = d.GetBlogPosts(page, search, categories, languages, technologies, first, last)
+		navpage = "blog"
+	}
+	
 	if err != nil {
 		log.Print(err)
 		return
@@ -104,7 +125,7 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 		values.Del("l")
 		values.Set("f", p[0].Date + " " + strconv.FormatInt(p[0].ID, 10))
 		values.Set("page", strconv.Itoa(page - 1))
-		lastPage = "/projects?" + values.Encode()
+		lastPage = "/" + navpage + "?" + values.Encode()
 	} else {
 		lastPage = "#"
 	}
@@ -114,16 +135,16 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 		values.Del("f")
 		values.Set("l", p[len(p) - 1].Date + " " + strconv.FormatInt(p[len(p) - 1].ID, 10))
 		values.Set("page", strconv.Itoa(page + 1))
-		nextPage = "/projects?" + values.Encode()
+		nextPage = "/" + navpage + "?" + values.Encode()
 	} else {
 		nextPage = "#"
 	}
 
-	err = t.ExecuteTemplate(w, "projects.gohtml", ProjectsData{
-		Page: 				"/projects", 
-		Projects: 			p,
+	err = t.ExecuteTemplate(w, navpage + ".gohtml", PostsData{
+		Page: 				"/" + navpage, 
+		Posts: 				p,
 		Search: 			search,
-		Types: 				types,
+		Categories: 		categories,
 		Languages: 			languages,
 		AllLanguages: 		allLanguages,
 		Technologies: 		technologies,
@@ -139,7 +160,15 @@ func ProjectsHandler(w http.ResponseWriter, r *http.Request, t *template.Templat
 	}
 }
 
-func ProjectHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t *template.Template, d *database.SQLiteDatabase) {
+func GetProjectPostHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t *template.Template, d *database.SQLiteDatabase) {
+	GetPostHandler(w, r, c, t, d, database.Project)
+}
+
+func GetBlogPostHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t *template.Template, d *database.SQLiteDatabase) {
+	GetPostHandler(w, r, c, t, d, database.Blog)
+}
+
+func GetPostHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t *template.Template, d *database.SQLiteDatabase, urlRoute database.Type) {
 	v := mux.Vars(r)
 	name, err := url.QueryUnescape(v["name"])
 	if err != nil {
@@ -153,7 +182,15 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t 
 		return
 	}
 
-	p, err := d.GetProjectByName(name)
+	var p *database.Post
+	var navpage string
+	if urlRoute == database.Project {
+		p, err = d.GetProjectPostByName(name)
+		navpage = "/projects"
+	} else {
+		p, err = d.GetBlogPostByName(name)
+		navpage = "/blog"
+	}
 	if err != nil {
 		log.Print(err)
 		return
@@ -164,71 +201,10 @@ func ProjectHandler(w http.ResponseWriter, r *http.Request, c *config.Config, t 
 	policy.AllowAttrs("class").Matching(regexp.MustCompile("^language-[a-zA-Z0-9]+$")).OnElements("code")
 	html := policy.SanitizeBytes(unsafe)
 
-	err = t.ExecuteTemplate(w, "project.gohtml", ProjectData{Page: "/projects", Project: p, ArticleHTML: template.HTML(html)})
+	err = t.ExecuteTemplate(w, "post.gohtml", PostData{Page: navpage, Post: p, ArticleHTML: template.HTML(html)})
 
 	if err != nil {
 		log.Print(err)
 		return
 	}
-}
-
-func PostProjectHandler(w http.ResponseWriter, r *http.Request, d *database.SQLiteDatabase) {
-	var body struct {
-		ID          int64  `json:"id"`
-		Name        string `json:"name"`
-		Description string `json:"description"`
-		Date        string `json:"date"`
-		Type        string `json:"type"`
-		Image       []byte `json:"image"`
-
-		Languages    []string `json:"languages"`
-		Technologies []string `json:"technologies"`
-
-		File []byte `json:"file"`
-	}
-
-	b, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	err = json.Unmarshal(b, &body)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	p := database.Project{
-		ID:          body.ID,
-		Name:        body.Name,
-		Description: body.Description,
-		Date:        body.Date,
-		Type:        body.Type,
-
-		Languages:    body.Languages,
-		Technologies: body.Technologies,
-
-		File: body.File,
-	}
-
-	types := []string{"Personal", "Hackathon", "Professional", "Academic"}
-	if !slices.Contains(types, p.Type) {
-		log.Print("Project type incorrect.")
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	project, err := d.CreateProject(p, body.Image)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusAccepted)
-	log.Print("New post submitted: " + project.Name)
-	return
 }

@@ -19,20 +19,20 @@
                 <h3 class="ml-1 text-lg text-gray-100">Filters</h3>
                 <hr>
                 <div class="my-2 ml-1 space-y-2">
-                    <label class="block relative pl-8 cursor-pointer checkmark-red">Personal Projects
-                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Personal" {{ checked "Personal" .Types }}>
+                    <label class="block relative pl-8 cursor-pointer checkmark-red">Development
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Development" {{ checked "Development" .Categories }}>
                         <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-red outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
-                    <label class="block relative pl-8 cursor-pointer checkmark-yellow">Hackathon Projects
-                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Hackathon" {{ checked "Hackathon" .Types }}>
+                    <label class="block relative pl-8 cursor-pointer checkmark-yellow">Linux
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Linux" {{ checked "Linux" .Categories }}>
                         <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-yellow outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
-                    <label class="block relative pl-8 cursor-pointer checkmark-green">Professional Projects
-                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Professional" {{ checked "Professional" .Types }}>
+                    <label class="block relative pl-8 cursor-pointer checkmark-green">Project Updates
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Updates" {{ checked "Project Updates" .Categories }}>
                         <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-green outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
-                    <label class="block relative pl-8 cursor-pointer checkmark-blue">Academic Projects
-                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Academic" {{ checked "Academic" .Types }}>
+                    <label class="block relative pl-8 cursor-pointer checkmark-blue">Other
+                        <input class="absolute w-0 h-0 opacity-0 cursor-pointer" type="checkbox" name="types" value="Other" {{ checked "Other" .Categories }}>
                         <span class="absolute left-0 top-[2px] w-5 h-5 bg-gray-700 rounded-full outline outline-blue outline-2 hover:bg-gray-900 checkmark"></span>
                     </label>
                 </div>
@@ -77,8 +77,8 @@
             </div>
             <div class="md:w-[650] xl:col-span-2 flex items-center flex-col">
                 <input name="search" value="{{ .Search }}" class="mx-auto mt-6 mb-16 xl:my-6 px-3 h-10 w-11/12 md:w-[650px] outline outline-gray-100 outline-2 bg-gray-800 rounded-2xl" type="text" placeholder="Search.." />
-                {{ if noProjects .Projects }}
-                <h2 class="mx-2 my-6 text-5xl text-center">No Matching Posts, Sorry</h2>
+                {{ if noPosts .Posts }}
+                <h2 class="mx-2 my-6 text-5xl text-center">No Matching Projects, Sorry</h2>
                 <p class="mx-2 text-center">Try adjusting the filters or title search.</p>
                 {{ else }}
                 <div class="flex justify-between items-center mt-4 h-[50px] w-11/12 md:w-[650px] rounded-t-2xl rounded-b-md outline outline-2 outline-gray-100 bg-gray-800 mx-auto">
@@ -116,13 +116,13 @@
                     </a>
                 </div>
                 <div class="mx-auto my-4 space-y-4 w-11/12 md:w-auto"> 
-                {{ range .Projects}}
+                {{ range .Posts}}
                 <div>
-                    <a href="/projects/{{.Name}}">
-                        <div class="h-80 w-full md:h-[250px] md:w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ projectColor .Type }}">
+                    <a href="/blog/{{.Name}}">
+                        <div class="h-80 w-full md:h-[250px] md:w-[650px] bg-gray-800 outline outline-2 rounded-2xl" style="outline-color: {{ postColor .Category }}">
                             <img src={{ imageFromID .Image }} alt="Hero Image" class="object-cover object-center w-full h-1/2 rounded-t-2xl"/>
                             <div class="w-full h-12 md:container md:flex md:justify-between md:items-center">
-                                <h1 class="overflow-hidden px-3 text-xl whitespace-nowrap text-ellipsis" style="color: {{ projectColor .Type }}">{{.Name}}</h1>
+                                <h1 class="overflow-hidden px-3 text-xl whitespace-nowrap text-ellipsis" style="color: {{ postColor .Category }}">{{.Name}}</h1>
                                 <p class="px-3 text-xs whitespace-nowrap md:text-base md:pl-0">{{ fmtDate .Date }}</p>
                             </div>
                             <div class="h-26 w-full md:h-[69px] px-3">

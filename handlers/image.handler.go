@@ -30,10 +30,8 @@ func GetImageHandler(w http.ResponseWriter, r *http.Request, d *database.SQLiteD
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/octet-stream")
 	w.Write(image)
-	return
 }
 
 func PostImageHandler(w http.ResponseWriter, r *http.Request, d *database.SQLiteDatabase, c *config.Config) {
@@ -49,7 +47,6 @@ func PostImageHandler(w http.ResponseWriter, r *http.Request, d *database.SQLite
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
+	w.Header().Set("Location", c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/image/" + strconv.FormatInt(id, 10))
 	w.WriteHeader(http.StatusCreated)
-	w.Header().Set("Location", c.Scheme + "://" + c.Host + "/image/" + strconv.FormatInt(id, 10))
-	return
 }

@@ -16,7 +16,7 @@
     <body class="flex flex-col min-h-screen font-sans font-light text-gray-100 bg-gray-700">
     {{ template "navbar" . }}
     <div class="mx-auto my-4 prose prose-catppuccin w-[91.666667%] md:w-auto">
-        <img src={{ imageFromID .Project.Image }} alt="Hero Image" class="rounded-xl"/>
+        <img src={{ imageFromID .Post.Image }} alt="Hero Image" class="rounded-xl"/>
         {{.ArticleHTML}}
     </div>
 {{ template "footer" }}
