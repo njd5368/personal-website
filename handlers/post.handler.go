@@ -85,6 +85,11 @@ func LatestPostHandler(w http.ResponseWriter, r *http.Request, c *config.Config,
 		log.Print(err)
 		name = ""
 	}
-
-	http.Redirect(w, r, c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/blog/" + name, http.StatusSeeOther)
+	
+	link := c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/blog"
+	if len(name) != 0 {
+		link += "/" + name
+	}
+	
+	http.Redirect(w, r, link, http.StatusSeeOther)
 }

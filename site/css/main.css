@@ -1264,6 +1264,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   height: 4rem;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
 .max-h-0 {
   max-height: 0px;
 }
@@ -1326,6 +1330,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .w-\[91\.666667\%\] {
   width: 91.666667%;
+}
+
+.w-4 {
+  width: 1rem;
 }
 
 .w-auto {
