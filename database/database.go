@@ -379,13 +379,13 @@ func (d *SQLiteDatabase) GetPosts(t Type, page int, search string, categories []
 	var posts []Post
 	for r.Next() {
 		var p Post
-		var languages string
-		var techs string
+		var languages sql.NullString
+		var techs sql.NullString
 		if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Category, &p.Image, &languages, &techs); err != nil {
 			return nil, err
 		}
-		p.Languages = strings.Split(languages, ",")
-		p.Technologies = strings.Split(techs, ",")
+		p.Languages = strings.Split(languages.String, ",")
+		p.Technologies = strings.Split(techs.String, ",")
 		posts = append(posts, p)
 	}
 
@@ -510,13 +510,13 @@ func (d *SQLiteDatabase) GetPostByName(t Type, n string) (*Post, error) {
 	}
 	
 	var p Post
-	var languages string
-	var techs string
+	var languages sql.NullString
+	var techs sql.NullString
 	if err := r.Scan(&p.ID, &p.Name, &p.Description, &p.Date, &p.Category, &p.Image, &p.File, &languages, &techs); err != nil {
 		return nil, err
 	}
-	p.Languages = strings.Split(languages, ",")
-	p.Technologies = strings.Split(techs, ",")
+	p.Languages = strings.Split(languages.String, ",")
+	p.Technologies = strings.Split(techs.String, ",")
 	return &p, nil
 }
 
