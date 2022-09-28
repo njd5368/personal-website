@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"net/url"
 	"nicholas-deary/config"
 	"nicholas-deary/database"
 	"nicholas-deary/handlers"
@@ -107,6 +108,9 @@ func init() {
 		},
 		"noPosts": func(p []database.Post) bool {
 			return len(p) == 0
+		},
+		"urlEncode": func(s string) string {
+			return url.QueryEscape(s)
 		},
 	})
 	t = template.Must(t.ParseGlob("site/templates/util/*"))

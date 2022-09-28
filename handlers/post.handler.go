@@ -45,7 +45,7 @@ func PostPostHandler(w http.ResponseWriter, r *http.Request, d *database.SQLiteD
 	p := database.Post{
 		ID:          body.ID,
 		Name:        body.Name,
-		Type: 		 database.StringToType(body.Type),
+		Type: 		   database.StringToType(body.Type),
 		Description: body.Description,
 		Date:        body.Date,
 		Category:    body.Category,
