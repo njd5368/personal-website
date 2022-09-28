@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"nicholas-deary/config"
 	"nicholas-deary/database"
 	"strconv"
@@ -88,7 +89,7 @@ func LatestPostHandler(w http.ResponseWriter, r *http.Request, c *config.Config,
 	
 	link := c.Scheme + "://" + c.Host + ":" + strconv.Itoa(c.Port) + "/blog"
 	if len(name) != 0 {
-		link += "/" + name
+		link += "/" + url.QueryEscape(name)
 	}
 	
 	http.Redirect(w, r, link, http.StatusSeeOther)
