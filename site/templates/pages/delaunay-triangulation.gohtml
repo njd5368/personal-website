@@ -1,0 +1,102 @@
+{{ template "header" }}
+    {{ template "navbar" . }}
+        <h1 class="mx-auto mt-4 text-2xl text-center text-blue">Visualization of Delaunay Triangulation Using The Bowyer Watson Algorithm</h1>
+        <h3 class="mx-auto text-center text-gray-100 text-md">by Nicholas Deary and Drew Haiber</h3>
+        <div class="flex flex-col my-4 bg-gray-700 xl:flex-row">
+            <div class="flex flex-col mx-auto xl:mr-4">
+                <canvas id="canvas" class="mx-4 rounded-lg w-[350px] sm:w-[600px] aspect-square"></canvas>
+                <div class="flex flex-row mx-auto my-4 space-x-4">
+                    <button id="triangulate" class="px-2 mx-auto text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700">
+                        Triangulate
+                    </button>
+                    <button id="step" class="px-2 mx-auto w-14 text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700">
+                        Step
+                    </button>
+                    <button id="next" class="hidden px-2 mx-auto w-14 text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700">
+                        Step
+                    </button>
+                    <button id="clear" class="px-2 mx-auto text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700">
+                        Clear
+                    </button>
+                </div>
+                <div class="flex flex-row items-center mx-auto mb-4">
+                    <button id="play" class="mx-auto w-8 h-8 text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700">
+                        <svg class="m-auto w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                            <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/>
+                        </svg>
+                    </button>
+                    <button id="pause" class="hidden mx-auto w-8 h-8 text-gray-100 rounded-2xl outline outline-gray-100 outline-1 hover:bg-gray-100 hover:text-gray-700">
+                        <svg class="m-auto w-4 h-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                            <!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+                            <path d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"/>
+                        </svg>
+                    </button>
+                    <div class="flex ml-4 bg-gray-700 rounded-xl outline outline-1 outline-gray-100 slider">
+                        <input id="speedSlider" class="w-32 h-4 bg-gray-700" type="range" min="200" max="1500" step="50" value="850">
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-2 py-4 mx-auto space-y-0 font-mono text-gray-100 bg-gray-800 rounded-lg xl:ml-4 h-min">
+                <span id="line01" class="block px-2 rounded-md"><span class="hljs-keyword">function</span> <span class="hljs-title function_">BowyerWatson</span> (pointList)</span>
+                <span id="line02" class="block px-2 rounded-md">&emsp;triangulation := empty triangle mesh data structure</span>
+                <span id="line03" class="block px-2 rounded-md">&emsp;add super-triangle to triangulation</span>
+                <span id="line04" class="block px-2 rounded-md">&emsp;<span class="hljs-keyword">for</span> each point <span class="hljs-keyword">in</span> pointList <span class="hljs-keyword">do</span></span>
+                <span id="line05" class="block px-2 rounded-md">&emsp;&emsp;badTriangles := empty set</span>
+                <span id="line06" class="block px-2 rounded-md">&emsp;&emsp;<span class="hljs-keyword">for</span> each triangle <span class="hljs-keyword">in</span> triangulation <span class="hljs-keyword">do</span></span>
+                <span id="line07" class="block px-2 rounded-md">&emsp;&emsp;&emsp;<span class="hljs-keyword">if</span> point is inside circumcircle <span class="hljs-keyword">of</span> triangle</span>
+                <span id="line08" class="block px-2 rounded-md">&emsp;&emsp;&emsp;&emsp;add triangle to badTriangles</span>
+                <span id="line09" class="block px-2 rounded-md">&emsp;&emsp;polygon := empty set</span>
+                <span id="line10" class="block px-2 rounded-md">&emsp;&emsp;<span class="hljs-keyword">for</span> each triangle <span class="hljs-keyword">in</span> badTriangles <span class="hljs-keyword">do</span></span>
+                <span id="line11" class="block px-2 rounded-md">&emsp;&emsp;&emsp;<span class="hljs-keyword">for</span> each edge <span class="hljs-keyword">in</span> triangle <span class="hljs-keyword">do</span></span>
+                <span id="line12" class="block px-2 rounded-md">&emsp;&emsp;&emsp;&emsp;<span class="hljs-keyword">if</span> edge is not shared by any other triangles <span class="hljs-keyword">in</span> badTriangles</span>
+                <span id="line13" class="block px-2 rounded-md">&emsp;&emsp;&emsp;&emsp;&emsp;add edge to polygon</span>
+                <span id="line14" class="block px-2 rounded-md">&emsp;&emsp;<span class="hljs-keyword">for</span> each triangle <span class="hljs-keyword">in</span> badTriangles <span class="hljs-keyword">do</span></span>
+                <span id="line15" class="block px-2 rounded-md">&emsp;&emsp;&emsp;remove triangle <span class="hljs-keyword">from</span> triangulation</span>
+                <span id="line16" class="block px-2 rounded-md">&emsp;&emsp;<span class="hljs-keyword">for</span> each edge <span class="hljs-keyword">in</span> polygon <span class="hljs-keyword">do</span></span>
+                <span id="line17" class="block px-2 rounded-md">&emsp;&emsp;&emsp;newTri := form a triangle <span class="hljs-keyword">from</span> edge to point</span>
+                <span id="line18" class="block px-2 rounded-md">&emsp;&emsp;&emsp;add newTri to triangulation</span>
+                <span id="line19" class="block px-2 rounded-md">&emsp;<span class="hljs-keyword">for</span> each triangle <span class="hljs-keyword">in</span> triangulation</span>
+                <span id="line20" class="block px-2 rounded-md">&emsp;&emsp;<span class="hljs-keyword">if</span> triangle contains a vertex <span class="hljs-keyword">from</span> original super-triangle</span>
+                <span id="line21" class="block px-2 rounded-md">&emsp;&emsp;&emsp;remove triangle <span class="hljs-keyword">from</span> triangulation</span>
+                <span id="line22" class="block px-2 rounded-md">&emsp;<span class="hljs-keyword">return</span> triangulation</span>
+            </div>
+		</div>
+		<div class="px-2 py-4 mx-auto mb-4 max-w-2xl text-gray-100">
+			<p> Delaunay Triangulation refers to the process of finding triangles that connect a set of points, 
+                with the restriction being that no point is inside another triangle's circumcircle 
+                (the circumcircle of a triangle refers to the circle that contains the endpoints of the triangle in its circumference). 
+                This tends to produce triangulations that avoids having triangles with small angles.</p>
+			<br>
+			<p> The Bowyer Watson method is an iterative algorithm for calculating Delaunay Triangulations. 
+                It starts by creating a single large triangle around all of the points as the startpoint of its triangulation. 
+                Then, it adds each point to the triangulation, one at a time. 
+                If it sees that a point is inside the circumcircle of a triangle that is in the triangulation, 
+                that triangle is removed and replaced with a triangle that connects to that point. 
+                Once all points are added, any triangle connecting to the outside large triangle added at the beginning are removed, 
+                resulting in the finished triangulation.
+            </p>
+			<br>
+            <p>
+                After the triangulation is complete, other algorithms can be used to refine the triangulation.
+                Ruppert's algorithm is one such algorithm that takes every triangle and checks the ratio between
+                the circumradius and the shortest edge. If that ratio is larger than a specified threshold, the
+                triangle is considered a "poor" triangle and optimized. To see how the algorithm works, check out   
+                <a class="underline text-blue" href="http://rupperts.wileymatthews.com/rupperts.html">Abigail Buckta and Wiley Matthews's visualization of Ruppert's algorithm</a>.
+            </p>
+            <br>
+            <p>
+                The source code for this project can be found on 
+                <a class="underline text-blue" href="https://github.com/drewhaiber/computational_geometry">GitHub</a> and 
+                a demo video on 
+                <a class="underline text-blue" href="https://youtu.be/XwhdzfOGe_k">YouTube</a>.
+            </p>
+            <br>
+			<p>For more information, check out the 
+                <a class="underline text-blue" href="https://en.wikipedia.org/wiki/Bowyer-Watson_algorithm">Bowyer Watson algorithm</a> and 
+                <a class="underline text-blue" href="https://en.wikipedia.org/wiki/Delaunay_triangulation">Delaunay Triangulation</a> Wikipedia pages.
+            </p>
+		</div>
+    <script src="site/js/delaunay-triangulation.js" ></script>
+{{ template "footer" }}

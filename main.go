@@ -49,17 +49,17 @@ func init() {
 		},
 		"postColor": func(p string) string {
 			colors := map[string]string{
-				"personal":     "#F28FAD",
-				"development":	"#F28FAD",
+				"personal":    "#f38ba8",
+				"development": "#f38ba8",
 
-				"hackathon":    "#F8BD96",
-				"linux":	    "#F8BD96",
+				"hackathon": "#fab387",
+				"linux":     "#fab387",
 
-				"professional": "#ABE9B3",
-				"update":		"#ABE9B3",
+				"professional": "#a6e3a1",
+				"update":       "#a6e3a1",
 
-				"academic":     "#96CDFB",
-				"other":     	"#96CDFB",
+				"academic": "#89b4fa",
+				"other":    "#89b4fa",
 			}
 			return colors[strings.ToLower(p)]
 		},
@@ -72,19 +72,19 @@ func init() {
 				for i := 1; i <= t; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
-			} else if c <= w / 2 + 1 {
-				for i := 1; i <= w - 2; i++ {
+			} else if c <= w/2+1 {
+				for i := 1; i <= w-2; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 				result = append(result, "...", strconv.Itoa(t))
-			} else if t-c < w / 2 + 1 {
+			} else if t-c < w/2+1 {
 				result = append(result, "1", "...")
 				for i := t - (w - 3); i <= t; i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 			} else {
 				result = append(result, "1", "...")
-				for i := c - ((w - 5) / 2); i <= c + ((w - 5) / 2); i++ {
+				for i := c - ((w - 5) / 2); i <= c+((w-5)/2); i++ {
 					result = append(result, strconv.Itoa(i))
 				}
 				result = append(result, "...", strconv.Itoa(t))
@@ -194,6 +194,9 @@ func main() {
 
 	r.HandleFunc("/latest", func(w http.ResponseWriter, r *http.Request) {
 		handlers.LatestPostHandler(w, r, c, d)
+	}).Methods("GET")
+	r.HandleFunc("/delaunay-triangulation", func(w http.ResponseWriter, r *http.Request) {
+		handlers.DelaunayTriangulationHandler(w, r, t)
 	}).Methods("GET")
 
 	r.HandleFunc("/image/{id}", func(w http.ResponseWriter, r *http.Request) {

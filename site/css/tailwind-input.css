@@ -18,23 +18,23 @@
   }
 
   .checkmark-red input:checked ~ .checkmark {
-    background-color: #F28FAD;
+    background-color: #f38ba8;
   }
 
   .checkmark-yellow input:checked ~ .checkmark {
-    background-color: #FAE3B0;
+    background-color: #f9e2af;
   }
 
   .checkmark-green input:checked ~ .checkmark {
-    background-color: #ABE9B3;
+    background-color: #a6e3a1;
   }
 
   .checkmark-blue input:checked ~ .checkmark {
-    background-color: #96CDFB;
+    background-color: #89b4fa;
   }
 
   .checkmark-gray-100 input:checked ~ .checkmark {
-    background-color: #D9E0EE;
+    background-color: #cdd6f4;
   }
 
   .nav-menu-toggle:checked ~ .nav-menu-content {
@@ -144,7 +144,32 @@
     display: inline;
   }
 
-  
+  .slider {
+    -webkit-appearance: none;
+  }
+  .slider input[type="range"] {
+    -webkit-appearance:none !important;
+  }
+  .slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none !important;
+    width: 16px;
+    height:16px;
+    background: #cdd6f4;
+    border: 2px solid #cdd6f4;
+    border-radius: 100%;
+    cursor: pointer;
+  }
+  .slider input[type="range"]::-webkit-slider-thumb:hover {
+    background: #cdd6f4;
+  }
+  .slider input[type="range"]::-moz-range-thumb {
+    background: #cdd6f4;
+    border-radius: 100%;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    height: 1rem;
+    width: 1rem;
+  }
 }
 
 pre code.hljs {
@@ -156,20 +181,20 @@ pre code.hljs {
     padding: 3px 5px;
   }
   .hljs {
-    background: #1A1826;
-    color: #D9E0EE;
+    background: #181825;
+    color: #cdd6f4;
   }
   .hljs-comment {
     font-style: italic;
-    color: #6E6C7E;
+    color: #6c7086;
   }
   .hljs-punctuation,
   .hljs-tag {
-    color: #988BA2;
+    color: #9399b2;
   }
   .hljs-tag .hljs-attr,
   .hljs-tag .hljs-name {
-    color: #D9E0EE;
+    color: #cdd6f4;
   }
   .hljs-attribute,
   .hljs-doctag,
@@ -178,21 +203,21 @@ pre code.hljs {
   .hljs-name,
   .hljs-selector-tag {
     font-weight: 700;
-    color: #F28FAD;
+    color: #f38ba8;
   }
   .hljs-deletion,
   .hljs-selector-class,
   .hljs-selector-id,
   .hljs-template-tag,
   .hljs-type {
-    color: #96CDFB;
+    color: #89b4fa;
   }
   .hljs-number {
-    color: #F8BD96;
+    color: #fab387;
   }
   .hljs-section,
   .hljs-title {
-    color: #96CDFB;
+    color: #89b4fa;
     font-style: italic;
   }
   .hljs-link,
@@ -203,27 +228,27 @@ pre code.hljs {
   .hljs-symbol,
   .hljs-template-variable,
   .hljs-variable {
-    color: #E8A2AF;
+    color: #eba0ac;
   }
   .hljs-quote,
   .hljs-string {
-    color: #ABE9B3;
+    color: #a6e3a1;
   }
   .hljs-literal {
-    color: #DDB6F2;
+    color: #cba6f7;
     font-style: italic;
   }
   .hljs-addition,
   .hljs-built_in,
   .hljs-bullet,
   .hljs-code {
-    color: #B5E8E0;
+    color: #94e2d5;
   }
   .hljs-meta {
-    color: #96CDFB;
+    color: #89b4fa;
   }
   .hljs-meta .hljs-string {
-    color: #89DCEB;
+    color: #89dceb;
   }
   .hljs-emphasis {
     font-style: italic;
@@ -231,4 +256,3 @@ pre code.hljs {
   .hljs-strong {
     font-weight: 700;
   }
-  
